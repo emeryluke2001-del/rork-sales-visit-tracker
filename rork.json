@@ -1,0 +1,10 @@
+{
+  "$schema": "https://rork.com/schema/rork.json",
+  "apps": [
+    {
+      "name": "Route Log",
+      "path": "expo",
+      "framework": "react-native"
+    }
+  ]
+}
