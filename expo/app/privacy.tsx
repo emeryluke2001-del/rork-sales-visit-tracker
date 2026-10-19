@@ -1,10 +1,28 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Stack } from "expo-router";
-import { Shield } from "lucide-react-native";
+import { Shield, Trash2 } from "lucide-react-native";
 import Colors from "@/constants/colors";
+import { useLocations } from "@/providers/LocationsProvider";
 
 export default function PrivacyPolicyScreen() {
+  const { locations, deleteAllData } = useLocations();
+
+  const confirmDeleteAll = () => {
+    Alert.alert(
+      "Delete account & data?",
+      "This will permanently erase all locations, contacts, visits, and notes stored on this device. This cannot be undone.",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete Everything",
+          style: "destructive",
+          onPress: () => deleteAllData(),
+        },
+      ]
+    );
+  };
+
   return (
     <>
       <Stack.Screen options={{ title: "Privacy Policy" }} />
@@ -65,6 +83,23 @@ export default function PrivacyPolicyScreen() {
           If you have any questions about this Privacy Policy, please contact
           the app developer through your app store listing.
         </Section>
+
+        <View style={[styles.section, styles.deleteSection]}>
+          <Text style={styles.sectionTitle}>Delete Account &amp; Data</Text>
+          <Text style={styles.sectionBody}>
+            Sales Manager has no accounts — everything lives on this device.
+            Deleting your account erases all {locations.length} location
+            {locations.length === 1 ? "" : "s"}, visits, and notes permanently.
+          </Text>
+          <Pressable
+            onPress={confirmDeleteAll}
+            style={({ pressed }) => [styles.deleteBtn, pressed && { opacity: 0.85 }]}
+            testID="delete-account-data"
+          >
+            <Trash2 size={16} color={Colors.danger} />
+            <Text style={styles.deleteBtnText}>Delete Account &amp; Data</Text>
+          </Pressable>
+        </View>
 
         <View style={styles.footer}>
           <Text style={styles.footerText}>
@@ -142,6 +177,26 @@ const styles = StyleSheet.create({
   footer: {
     marginTop: 16,
     paddingHorizontal: 8,
+  },
+  deleteSection: {
+    borderColor: "#FECACA",
+  },
+  deleteBtn: {
+    marginTop: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    paddingVertical: 13,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.danger,
+    backgroundColor: "#FEF2F2",
+  },
+  deleteBtnText: {
+    color: Colors.danger,
+    fontSize: 14,
+    fontWeight: "700",
   },
   footerText: {
     fontSize: 12,

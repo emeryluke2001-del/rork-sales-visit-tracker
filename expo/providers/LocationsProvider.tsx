@@ -120,6 +120,10 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
     [locations, writeMutation]
   );
 
+  const deleteAllData = useCallback(() => {
+    writeMutation.mutate([]);
+  }, [writeMutation]);
+
   const stats = useMemo(() => {
     const byStatus: Record<VisitStatus, number> = {
       prospect: 0,
@@ -144,6 +148,7 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
     deleteLocation,
     addVisit,
     deleteVisit,
+    deleteAllData,
     stats,
   };
 });

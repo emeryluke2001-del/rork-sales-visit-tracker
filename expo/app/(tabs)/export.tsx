@@ -66,9 +66,9 @@ export default function ExportScreen() {
         return;
       }
       const filename = `route-log-${new Date().toISOString().slice(0, 10)}.csv`;
-      const dir = FileSystem.cacheDirectory ?? FileSystem.documentDirectory ?? "";
-      const uri = dir + filename;
-      await FileSystem.writeAsStringAsync(uri, csv);
+      const file = new FileSystem.File(FileSystem.Paths.cache, filename);
+      file.write(csv, { encoding: "utf8" });
+      const uri = file.uri;
       const available = await Sharing.isAvailableAsync();
       if (available) {
         await Sharing.shareAsync(uri, {
