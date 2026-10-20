@@ -36,7 +36,7 @@ export default function PrivacyPolicyScreen() {
             <Shield color={Colors.navy} size={28} />
           </View>
           <Text style={styles.title}>Privacy Policy</Text>
-          <Text style={styles.updated}>Last updated: April 23, 2026</Text>
+          <Text style={styles.updated}>Last updated: October 19, 2026</Text>
         </View>
 
         <Section title="Overview">
@@ -57,10 +57,9 @@ export default function PrivacyPolicyScreen() {
           store or access this data on our servers.
         </Section>
 
-        <Section title="Permissions">
-          The app may request access to your location and contacts to improve
-          your workflow. These permissions are optional and used only on your
-          device.
+        <Section title="Data Stays on Your Device">
+          All data stays only on this device. The app does not access your
+          location, contacts, camera, or photos.
         </Section>
 
         <Section title="Data Security">
@@ -80,8 +79,18 @@ export default function PrivacyPolicyScreen() {
         </Section>
 
         <Section title="Contact">
-          If you have any questions about this Privacy Policy, please contact
-          the app developer through your app store listing.
+          If you have any questions about this Privacy Policy, contact us at{" "}
+          <Text
+            style={styles.emailLink}
+            onPress={() => {
+              import("react-native").then(({ Linking }) =>
+                Linking.openURL("mailto:emeryluke2001@gmail.com").catch(() => {})
+              );
+            }}
+          >
+            emeryluke2001@gmail.com
+          </Text>
+          .
         </Section>
 
         <View style={[styles.section, styles.deleteSection]}>
@@ -180,6 +189,10 @@ const styles = StyleSheet.create({
   },
   deleteSection: {
     borderColor: "#FECACA",
+  },
+  emailLink: {
+    color: Colors.navy,
+    fontWeight: "600",
   },
   deleteBtn: {
     marginTop: 12,
