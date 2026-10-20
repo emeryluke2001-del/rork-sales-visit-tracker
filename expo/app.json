@@ -15,14 +15,15 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "app.rork.xehxvjwmetaompi76bokr"
+      "bundleIdentifier": "com.efficientme.salesmanager"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "app.rork.xehxvjwmetaompi76bokr"
+      "package": "com.efficientme.salesmanager",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
