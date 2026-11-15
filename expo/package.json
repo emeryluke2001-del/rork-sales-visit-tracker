@@ -56,5 +56,12 @@
     "axios": "1.13.2",
     "expo-location": "~19.0.8"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "autolinking": {
+      "exclude": [
+        "expo-location"
+      ]
+    }
+  }
 }
