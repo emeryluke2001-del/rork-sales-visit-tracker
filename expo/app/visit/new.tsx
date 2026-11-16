@@ -3,15 +3,16 @@ import {
   KeyboardAvoidingView,
   Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { router, useLocalSearchParams } from "expo-router";
 import { Check } from "lucide-react-native";
 import Colors from "@/constants/colors";
 import { useLocationById, useLocations } from "@/providers/LocationsProvider";
+import { router, useLocalSearchParams } from "expo-router";
 
 export default function NewVisitScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -34,10 +35,14 @@ export default function NewVisitScreen() {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.subtitle}>Visiting</Text>
         <Text style={styles.title}>{location.businessName}</Text>
         <Text style={styles.date}>
@@ -68,7 +73,7 @@ export default function NewVisitScreen() {
           <Check size={18} color={Colors.cream} strokeWidth={2.5} />
           <Text style={styles.saveText}>Log Visit</Text>
         </Pressable>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 }

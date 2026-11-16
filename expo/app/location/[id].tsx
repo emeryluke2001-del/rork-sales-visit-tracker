@@ -19,6 +19,7 @@ import {
   Trash2,
   Calendar,
   Navigation,
+  Building2,
 } from "lucide-react-native";
 import Colors from "@/constants/colors";
 import { useLocationById, useLocations } from "@/providers/LocationsProvider";
@@ -36,7 +37,7 @@ function formatFullDate(iso: string): string {
 export default function LocationDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const location = useLocationById(id);
-  const { deleteLocation, deleteVisit } = useLocations();
+  const { deleteLocation, deleteVisit, updateLocation } = useLocations();
 
   const meta = useMemo(
     () => (location ? STATUS_META[location.status] : null),
@@ -125,6 +126,48 @@ export default function LocationDetailScreen() {
             </View>
           ) : null}
         </View>
+
+        {location.isAccount ? (
+          <Pressable
+            onPress={() => router.push(`/account/${location.id}`)}
+            style={({ pressed }) => [
+              styles.accountBtn,
+              pressed && { opacity: 0.85 },
+            ]}
+            testID="view-account"
+          >
+            <Building2 size={16} color={Colors.cream} />
+            <Text style={styles.accountBtnText}>View account</Text>
+          </Pressable>
+        ) : (
+          <Pressable
+            onPress={() =>
+              Alert.alert(
+                "Convert to account?",
+                "This location will appear in the Accounts tab so you can track jobs and income for it.",
+                [
+                  { text: "Cancel", style: "cancel" },
+                  {
+                    text: "Convert",
+                    onPress: () =>
+                      updateLocation(location.id, {
+                        isAccount: true,
+                        accountSince: new Date().toISOString(),
+                      }),
+                  },
+                ]
+              )
+            }
+            style={({ pressed }) => [
+              styles.accountBtn,
+              pressed && { opacity: 0.85 },
+            ]}
+            testID="convert-to-account"
+          >
+            <Building2 size={16} color={Colors.cream} />
+            <Text style={styles.accountBtnText}>Convert to account</Text>
+          </Pressable>
+        )}
 
         <View style={styles.quickRow}>
           <QuickBtn
@@ -291,6 +334,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   tagText: { fontSize: 11, color: Colors.inkSoft, fontWeight: "600" },
+  accountBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    backgroundColor: "#117342",
+    paddingVertical: 14,
+    borderRadius: 14,
+  },
+  accountBtnText: { color: Colors.cream, fontSize: 14, fontWeight: "700" },
   quickRow: { flexDirection: "row", gap: 10 },
   quickBtn: {
     flex: 1,

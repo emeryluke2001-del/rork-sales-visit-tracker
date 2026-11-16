@@ -6,6 +6,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { LocationsProvider } from "@/providers/LocationsProvider";
+import { JobsProvider } from "@/providers/JobsProvider";
 import Colors from "@/constants/colors";
 
 SplashScreen.preventAutoHideAsync();
@@ -23,8 +24,7 @@ function RootLayoutNav() {
         contentStyle: { backgroundColor: Colors.cream },
       }}
     >
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="privacy" options={{ title: "Privacy Policy" }} />
+      <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
       <Stack.Screen
         name="location/[id]"
         options={{ title: "Location", headerBackTitle: "Back" }}
@@ -53,6 +53,30 @@ function RootLayoutNav() {
           headerBackTitle: "Cancel",
         }}
       />
+      <Stack.Screen
+        name="account/[id]"
+        options={{ title: "Account", headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="job/[id]"
+        options={{ title: "Job", headerBackTitle: "Back" }}
+      />
+      <Stack.Screen
+        name="job/new"
+        options={{
+          title: "New Job",
+          presentation: "modal",
+          headerBackTitle: "Cancel",
+        }}
+      />
+      <Stack.Screen
+        name="job/edit/[id]"
+        options={{
+          title: "Edit Job",
+          presentation: "modal",
+          headerBackTitle: "Cancel",
+        }}
+      />
     </Stack>
   );
 }
@@ -67,8 +91,10 @@ export default function RootLayout() {
       <GestureHandlerRootView style={{ flex: 1 }}>
         <SafeAreaProvider>
           <LocationsProvider>
-            <StatusBar style="dark" />
-            <RootLayoutNav />
+            <JobsProvider>
+              <StatusBar style="dark" />
+              <RootLayoutNav />
+            </JobsProvider>
           </LocationsProvider>
         </SafeAreaProvider>
       </GestureHandlerRootView>

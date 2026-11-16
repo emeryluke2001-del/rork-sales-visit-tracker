@@ -22,13 +22,24 @@ import * as FileSystem from "expo-file-system";
 import * as Haptics from "expo-haptics";
 import Colors from "@/constants/colors";
 import { useLocations } from "@/providers/LocationsProvider";
-import { locationsToCSV } from "@/utils/csv";
+import { useJobs } from "@/providers/JobsProvider";
+import { locationsToCSV, jobsToCSV } from "@/utils/csv";
+import DrawerMenuButton from "@/components/DrawerMenuButton";
 
 export default function ExportScreen() {
   const { locations } = useLocations();
-  const [copied, setCopied] = useState<boolean>(false);
+  const { jobs } = useJobs();
+  const [copied, setCopied] = useState<string | null>(null);
+
+  const accountNameById = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const l of locations) map[l.id] = l.businessName;
+    return map;
+  }, [locations]);
 
   const csv = useMemo(() => locationsToCSV(locations), [locations]);
+  const jobsCsv = useMemo(() => jobsToCSV(jobs, accountNameById), [jobs, accountNameById]);
+
   const preview = useMemo(() => {
     const lines = csv.split("\n").slice(0, 6);
     return lines.join("\n");
@@ -40,34 +51,40 @@ export default function ExportScreen() {
     }
   };
 
-  const onCopy = async () => {
+  const flash = (which: string) => {
+    setCopied(which);
+    setTimeout(() => setCopied(null), 1800);
+  };
+
+  const onCopy = async (which: "locations" | "jobs") => {
     hapticLight();
+    const text = which === "locations" ? csv : jobsCsv;
     try {
-      await Clipboard.setStringAsync(csv);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      await Clipboard.setStringAsync(text);
+      flash(which);
     } catch (e) {
       console.log("[export] copy error", e);
       Alert.alert("Copy failed", "Could not copy CSV to clipboard.");
     }
   };
 
-  const onShare = async () => {
+  const onShare = async (which: "locations" | "jobs") => {
     hapticLight();
+    const text = which === "locations" ? csv : jobsCsv;
     try {
       if (Platform.OS === "web") {
-        const blob = new Blob([csv], { type: "text/csv" });
+        const blob = new Blob([text], { type: "text/csv" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `route-log-${new Date().toISOString().slice(0, 10)}.csv`;
+        a.download = `${which}-${new Date().toISOString().slice(0, 10)}.csv`;
         a.click();
         URL.revokeObjectURL(url);
         return;
       }
-      const filename = `route-log-${new Date().toISOString().slice(0, 10)}.csv`;
+      const filename = `${which}-${new Date().toISOString().slice(0, 10)}.csv`;
       const file = new FileSystem.File(FileSystem.Paths.cache, filename);
-      file.write(csv, { encoding: "utf8" });
+      file.write(text, { encoding: "utf8" });
       const uri = file.uri;
       const available = await Sharing.isAvailableAsync();
       if (available) {
@@ -102,11 +119,16 @@ export default function ExportScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Export</Text>
-        <Text style={styles.subtitle}>
-          {locations.length} location{locations.length === 1 ? "" : "s"} ready to send to Google
-          Sheets
-        </Text>
+        <View style={styles.headerRow}>
+          <DrawerMenuButton />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.title}>Export</Text>
+            <Text style={styles.subtitle}>
+              {locations.length} location{locations.length === 1 ? "" : "s"} · {jobs.length} job
+              {jobs.length === 1 ? "" : "s"} ready for Google Sheets
+            </Text>
+          </View>
+        </View>
 
         <View style={styles.hero}>
           <View style={styles.heroIcon}>
@@ -114,37 +136,67 @@ export default function ExportScreen() {
           </View>
           <Text style={styles.heroTitle}>CSV · Google Sheets compatible</Text>
           <Text style={styles.heroText}>
-            Export every business, contact, status, notes, and visit count. Paste directly into a
-            new Google Sheet or share the file from your device.
+            Export locations and jobs as two separate CSV files. Copy to the clipboard and paste
+            into a new Google Sheet, or share the file from your device.
           </Text>
         </View>
 
         <View style={styles.actions}>
+          <Text style={styles.sectionLabel}>LOCATIONS</Text>
           <Pressable
-            onPress={onCopy}
+            onPress={() => onCopy("locations")}
             style={({ pressed }) => [styles.primaryBtn, pressed && { opacity: 0.9 }]}
             disabled={locations.length === 0}
             testID="copy-csv"
           >
-            {copied ? (
+            {copied === "locations" ? (
               <Check size={18} color={Colors.cream} strokeWidth={2.5} />
             ) : (
               <Copy size={18} color={Colors.cream} strokeWidth={2.5} />
             )}
             <Text style={styles.primaryBtnText}>
-              {copied ? "Copied to clipboard" : "Copy CSV"}
+              {copied === "locations" ? "Copied to clipboard" : "Copy Locations CSV"}
             </Text>
           </Pressable>
 
           <Pressable
-            onPress={onShare}
+            onPress={() => onShare("locations")}
             style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
             disabled={locations.length === 0}
             testID="share-csv"
           >
             <Share2 size={18} color={Colors.navy} strokeWidth={2.5} />
             <Text style={styles.secondaryBtnText}>
-              {Platform.OS === "web" ? "Download CSV" : "Share as file"}
+              {Platform.OS === "web" ? "Download Locations CSV" : "Share Locations file"}
+            </Text>
+          </Pressable>
+
+          <Text style={[styles.sectionLabel, { marginTop: 10 }]}>JOBS</Text>
+          <Pressable
+            onPress={() => onCopy("jobs")}
+            style={({ pressed }) => [styles.greenBtn, pressed && { opacity: 0.9 }]}
+            disabled={jobs.length === 0}
+            testID="copy-jobs-csv"
+          >
+            {copied === "jobs" ? (
+              <Check size={18} color={Colors.cream} strokeWidth={2.5} />
+            ) : (
+              <Copy size={18} color={Colors.cream} strokeWidth={2.5} />
+            )}
+            <Text style={styles.primaryBtnText}>
+              {copied === "jobs" ? "Copied to clipboard" : "Copy Jobs CSV"}
+            </Text>
+          </Pressable>
+
+          <Pressable
+            onPress={() => onShare("jobs")}
+            style={({ pressed }) => [styles.secondaryBtn, pressed && { opacity: 0.9 }]}
+            disabled={jobs.length === 0}
+            testID="share-jobs-csv"
+          >
+            <Share2 size={18} color={Colors.navy} strokeWidth={2.5} />
+            <Text style={styles.secondaryBtnText}>
+              {Platform.OS === "web" ? "Download Jobs CSV" : "Share Jobs file"}
             </Text>
           </Pressable>
 
@@ -159,7 +211,7 @@ export default function ExportScreen() {
 
         <View style={styles.steps}>
           <Text style={styles.stepsTitle}>How to send to Google Sheets</Text>
-          <Step n={1} text="Tap Copy CSV above." />
+          <Step n={1} text="Tap Copy above for locations or jobs." />
           <Step n={2} text="Open sheets.new (or any sheet)." />
           <Step
             n={3}
@@ -168,7 +220,7 @@ export default function ExportScreen() {
         </View>
 
         <View style={styles.previewWrap}>
-          <Text style={styles.previewLabel}>Preview</Text>
+          <Text style={styles.previewLabel}>Preview · Locations CSV</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             <Text style={styles.previewText}>
               {locations.length === 0
@@ -196,8 +248,9 @@ function Step({ n, text }: { n: number; text: string }) {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   content: { padding: 20, paddingBottom: 100 },
+  headerRow: { flexDirection: "row", alignItems: "flex-start", gap: 4, marginBottom: 16, marginLeft: -8 },
   title: { fontSize: 28, fontWeight: "800", color: Colors.ink, letterSpacing: -0.5 },
-  subtitle: { fontSize: 13, color: Colors.inkSoft, marginTop: 4, marginBottom: 20 },
+  subtitle: { fontSize: 13, color: Colors.inkSoft, marginTop: 4 },
   hero: {
     backgroundColor: Colors.navy,
     borderRadius: 20,
@@ -220,9 +273,25 @@ const styles = StyleSheet.create({
     marginTop: 6,
     lineHeight: 19,
   },
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: Colors.inkMuted,
+    letterSpacing: 1.2,
+    marginTop: 4,
+  },
   actions: { gap: 10, marginBottom: 20 },
   primaryBtn: {
     backgroundColor: Colors.navy,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 10,
+    paddingVertical: 15,
+    borderRadius: 14,
+  },
+  greenBtn: {
+    backgroundColor: "#117342",
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",

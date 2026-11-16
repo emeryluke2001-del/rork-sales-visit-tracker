@@ -20,6 +20,8 @@ export interface Location {
   longitude?: number;
   lastVisited?: string;
   visits: Visit[];
+  isAccount?: boolean;
+  accountSince?: string;
   createdAt: string;
   updatedAt: string;
 }

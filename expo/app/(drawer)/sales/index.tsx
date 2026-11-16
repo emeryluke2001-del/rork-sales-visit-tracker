@@ -22,6 +22,7 @@ import Colors from "@/constants/colors";
 import { useLocations } from "@/providers/LocationsProvider";
 import { Location, STATUS_META, VisitStatus } from "@/types/location";
 import * as Haptics from "expo-haptics";
+import DrawerMenuButton from "@/components/DrawerMenuButton";
 
 const FILTERS: { key: "all" | VisitStatus; label: string }[] = [
   { key: "all", label: "All" },
@@ -61,8 +62,15 @@ function LocationCard({ item, onPress }: { item: Location; onPress: () => void }
             </Text>
           ) : null}
         </View>
-        <View style={[styles.badge, { backgroundColor: meta.bg }]}>
-          <Text style={[styles.badgeText, { color: meta.color }]}>{meta.label}</Text>
+        <View style={{ gap: 6, alignItems: "flex-end" }}>
+          <View style={[styles.badge, { backgroundColor: meta.bg }]}>
+            <Text style={[styles.badgeText, { color: meta.color }]}>{meta.label}</Text>
+          </View>
+          {item.isAccount ? (
+            <View style={[styles.badge, { backgroundColor: "#DCFCE7" }]}>
+              <Text style={[styles.badgeText, { color: "#117342" }]}>Account</Text>
+            </View>
+          ) : null}
         </View>
       </View>
 
@@ -127,12 +135,15 @@ export default function LocationsScreen() {
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
       <View style={styles.header}>
-        <View>
-          <Text style={styles.hello}>Route Log</Text>
-          <Text style={styles.subhello}>
-            {stats.total} location{stats.total === 1 ? "" : "s"} · {stats.thisWeek} visit
-            {stats.thisWeek === 1 ? "" : "s"} this week
-          </Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 4, flex: 1 }}>
+          <DrawerMenuButton />
+          <View style={{ flex: 1 }}>
+            <Text style={styles.hello}>Route Log</Text>
+            <Text style={styles.subhello} numberOfLines={1}>
+              {stats.total} location{stats.total === 1 ? "" : "s"} · {stats.thisWeek} visit
+              {stats.thisWeek === 1 ? "" : "s"} this week
+            </Text>
+          </View>
         </View>
         <Pressable
           onPress={onAdd}
@@ -215,12 +226,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 20,
+    paddingLeft: 12,
+    paddingRight: 20,
     paddingTop: 8,
     paddingBottom: 16,
+    gap: 8,
   },
-  hello: { fontSize: 28, fontWeight: "800", color: Colors.ink, letterSpacing: -0.5 },
-  subhello: { fontSize: 13, color: Colors.inkSoft, marginTop: 2 },
+  hello: { fontSize: 24, fontWeight: "800", color: Colors.ink, letterSpacing: -0.5 },
+  subhello: { fontSize: 12, color: Colors.inkSoft, marginTop: 2 },
   addBtn: {
     width: 44,
     height: 44,

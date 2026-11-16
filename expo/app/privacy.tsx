@@ -4,20 +4,25 @@ import { Stack } from "expo-router";
 import { Shield, Trash2 } from "lucide-react-native";
 import Colors from "@/constants/colors";
 import { useLocations } from "@/providers/LocationsProvider";
+import { useJobs } from "@/providers/JobsProvider";
 
 export default function PrivacyPolicyScreen() {
   const { locations, deleteAllData } = useLocations();
+  const { deleteAllJobs } = useJobs();
 
   const confirmDeleteAll = () => {
     Alert.alert(
       "Delete account & data?",
-      "This will permanently erase all locations, contacts, visits, and notes stored on this device. This cannot be undone.",
+      "This will permanently erase all locations, contacts, visits, jobs, and notes stored on this device. This cannot be undone.",
       [
         { text: "Cancel", style: "cancel" },
         {
           text: "Delete Everything",
           style: "destructive",
-          onPress: () => deleteAllData(),
+          onPress: () => {
+            deleteAllJobs();
+            deleteAllData();
+          },
         },
       ]
     );

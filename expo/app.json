@@ -23,7 +23,8 @@
         "backgroundColor": "#117342"
       },
       "package": "com.efficientme.salesmanager",
-      "versionCode": 1
+      "versionCode": 1,
+      "softwareKeyboardLayoutMode": "resize"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

@@ -4,7 +4,7 @@ import React from "react";
 import Colors from "@/constants/colors";
 import { Platform } from "react-native";
 
-export default function TabLayout() {
+export default function SalesTabLayout() {
   return (
     <Tabs
       screenOptions={{
