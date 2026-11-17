@@ -24,14 +24,14 @@ export default function DrawerLayout() {
         }}
       />
       <Drawer.Screen
-        name="jobs"
+        name="jobs/index"
         options={{
           title: "Jobs",
           drawerIcon: ({ color, size }) => <Briefcase color={color} size={size} />,
         }}
       />
       <Drawer.Screen
-        name="accounts"
+        name="accounts/index"
         options={{
           title: "Accounts",
           drawerIcon: ({ color, size }) => <Building2 color={color} size={size} />,
