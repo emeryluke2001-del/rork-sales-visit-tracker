@@ -39,13 +39,23 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
   const [completedDate, setCompletedDate] = useState<string>(initial?.completedDate ?? "");
   const [notes, setNotes] = useState<string>(initial?.notes ?? "");
   const [pickerOpen, setPickerOpen] = useState<boolean>(false);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const account = accounts.find((a) => a.id === accountId);
   const valid = title.trim().length > 0;
 
+  // Keystrokes like "111720" become "1117-20"; digits auto-shape into YYYY-MM-DD.
+  const formatDateInput = (raw: string): string => {
+    const digits = raw.replace(/\D/g, "").slice(0, 8);
+    return [digits.slice(0, 4), digits.slice(4, 6), digits.slice(6, 8)]
+      .filter(Boolean)
+      .join("-");
+  };
+
   const submit = () => {
-    if (!valid) return;
-    const amount = parseFloat(amountText.replace(/[^0-9.\-]/g, "")) || 0;
+    if (!valid || submitting) return;
+    setSubmitting(true);
+    const amount = parseFloat(amountText.replace(/[^0-9.-]/g, "")) || 0;
     onSubmit({
       accountId,
       title: title.trim(),
@@ -130,7 +140,7 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
             <Text style={styles.fieldLabel}>Scheduled Date</Text>
             <TextInput
               value={scheduledDate}
-              onChangeText={setScheduledDate}
+              onChangeText={(t) => setScheduledDate(formatDateInput(t))}
               placeholder="2026-11-20"
               placeholderTextColor={Colors.inkMuted}
               style={styles.input}
@@ -144,7 +154,7 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
           <Text style={styles.fieldLabel}>Completed Date</Text>
           <TextInput
             value={completedDate}
-            onChangeText={setCompletedDate}
+            onChangeText={(t) => setCompletedDate(formatDateInput(t))}
             placeholder="2026-11-25 (set automatically when completed)"
             placeholderTextColor={Colors.inkMuted}
             style={styles.input}
@@ -200,10 +210,10 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
 
         <Pressable
           onPress={submit}
-          disabled={!valid}
+          disabled={!valid || submitting}
           style={({ pressed }) => [
             styles.submit,
-            !valid && { opacity: 0.4 },
+            (!valid || submitting) && { opacity: 0.4 },
             pressed && { opacity: 0.9 },
           ]}
           testID="submit-job"
@@ -222,7 +232,7 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
                 keyExtractor={(a) => a.id}
                 ListEmptyComponent={
                   <Text style={styles.modalEmpty}>
-                    No accounts yet. Open a location and tap "Convert to Account" first.
+                    No accounts yet. Add one from the Accounts tab.
                   </Text>
                 }
                 renderItem={({ item }) => (

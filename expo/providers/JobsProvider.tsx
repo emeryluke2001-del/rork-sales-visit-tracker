@@ -1,7 +1,7 @@
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Job } from "@/types/job";
 
 const JOBS_KEY = "rork.jobs.v1";
@@ -42,40 +42,57 @@ export const [JobsProvider, useJobs] = createContextHook(() => {
       return next;
     },
     onSuccess: (next) => {
+      jobsRef.current = next;
       qc.setQueryData(["jobs"], next);
     },
   });
+
+  // Latest committed data, so rapid successive writes never work from a stale array.
+  const jobsRef = useRef<Job[]>([]);
+  useEffect(() => {
+    jobsRef.current = jobs;
+  }, [jobs]);
+
+  const write = useCallback(
+    (updater: (prev: Job[]) => Job[]) => {
+      const next = updater(jobsRef.current);
+      jobsRef.current = next;
+      writeMutation.mutate(next);
+    },
+    [writeMutation]
+  );
 
   const addJob = useCallback(
     (input: Omit<Job, "id" | "createdAt" | "updatedAt">) => {
       const now = new Date().toISOString();
       const job: Job = { ...input, id: uid(), createdAt: now, updatedAt: now };
-      writeMutation.mutate([job, ...jobs]);
+      write((prev) => [job, ...prev]);
       return job;
     },
-    [jobs, writeMutation]
+    [write]
   );
 
   const updateJob = useCallback(
     (id: string, patch: Partial<Job>) => {
-      const next = jobs.map((j) =>
-        j.id === id ? { ...j, ...patch, updatedAt: new Date().toISOString() } : j
+      write((prev) =>
+        prev.map((j) =>
+          j.id === id ? { ...j, ...patch, updatedAt: new Date().toISOString() } : j
+        )
       );
-      writeMutation.mutate(next);
     },
-    [jobs, writeMutation]
+    [write]
   );
 
   const deleteJob = useCallback(
     (id: string) => {
-      writeMutation.mutate(jobs.filter((j) => j.id !== id));
+      write((prev) => prev.filter((j) => j.id !== id));
     },
-    [jobs, writeMutation]
+    [write]
   );
 
   const deleteAllJobs = useCallback(() => {
-    writeMutation.mutate([]);
-  }, [writeMutation]);
+    write(() => []);
+  }, [write]);
 
   const jobsByAccount = useMemo(() => {
     const map: Record<string, Job[]> = {};

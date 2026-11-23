@@ -1,7 +1,7 @@
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { Location, Visit, VisitStatus } from "@/types/location";
 
 const STORAGE_KEY = "routelog.locations.v1";
@@ -42,9 +42,25 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
       return next;
     },
     onSuccess: (next) => {
+      locationsRef.current = next;
       qc.setQueryData(["locations"], next);
     },
   });
+
+  // Latest committed data, so rapid successive writes never work from a stale array.
+  const locationsRef = useRef<Location[]>([]);
+  useEffect(() => {
+    locationsRef.current = locations;
+  }, [locations]);
+
+  const write = useCallback(
+    (updater: (prev: Location[]) => Location[]) => {
+      const next = updater(locationsRef.current);
+      locationsRef.current = next;
+      writeMutation.mutate(next);
+    },
+    [writeMutation]
+  );
 
   const addLocation = useCallback(
     (
@@ -68,29 +84,28 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
         visits,
         lastVisited,
       };
-      const next = [loc, ...locations];
-      writeMutation.mutate(next);
+      write((prev) => [loc, ...prev]);
       return loc;
     },
-    [locations, writeMutation]
+    [write]
   );
 
   const updateLocation = useCallback(
     (id: string, patch: Partial<Location>) => {
-      const next = locations.map((l) =>
-        l.id === id ? { ...l, ...patch, updatedAt: new Date().toISOString() } : l
+      write((prev) =>
+        prev.map((l) =>
+          l.id === id ? { ...l, ...patch, updatedAt: new Date().toISOString() } : l
+        )
       );
-      writeMutation.mutate(next);
     },
-    [locations, writeMutation]
+    [write]
   );
 
   const deleteLocation = useCallback(
     (id: string) => {
-      const next = locations.filter((l) => l.id !== id);
-      writeMutation.mutate(next);
+      write((prev) => prev.filter((l) => l.id !== id));
     },
-    [locations, writeMutation]
+    [write]
   );
 
   const addVisit = useCallback(
@@ -100,41 +115,43 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
         date: new Date().toISOString(),
         note,
       };
-      const next = locations.map((l) =>
-        l.id === id
-          ? {
-              ...l,
-              visits: [visit, ...l.visits],
-              lastVisited: visit.date,
-              updatedAt: visit.date,
-            }
-          : l
+      write((prev) =>
+        prev.map((l) =>
+          l.id === id
+            ? {
+                ...l,
+                visits: [visit, ...l.visits],
+                lastVisited: visit.date,
+                updatedAt: visit.date,
+              }
+            : l
+        )
       );
-      writeMutation.mutate(next);
     },
-    [locations, writeMutation]
+    [write]
   );
 
   const deleteVisit = useCallback(
     (locationId: string, visitId: string) => {
-      const next = locations.map((l) => {
-        if (l.id !== locationId) return l;
-        const remaining = l.visits.filter((v) => v.id !== visitId);
-        return {
-          ...l,
-          visits: remaining,
-          lastVisited: remaining[0]?.date,
-          updatedAt: new Date().toISOString(),
-        };
-      });
-      writeMutation.mutate(next);
+      write((prev) =>
+        prev.map((l) => {
+          if (l.id !== locationId) return l;
+          const remaining = l.visits.filter((v) => v.id !== visitId);
+          return {
+            ...l,
+            visits: remaining,
+            lastVisited: remaining[0]?.date,
+            updatedAt: new Date().toISOString(),
+          };
+        })
+      );
     },
-    [locations, writeMutation]
+    [write]
   );
 
   const deleteAllData = useCallback(() => {
-    writeMutation.mutate([]);
-  }, [writeMutation]);
+    write(() => []);
+  }, [write]);
 
   const stats = useMemo(() => {
     const byStatus: Record<VisitStatus, number> = {

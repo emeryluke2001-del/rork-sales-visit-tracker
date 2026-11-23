@@ -34,11 +34,13 @@ export default function LocationForm({ initial, onSubmit, submitLabel, showFirst
   const [tagsText, setTagsText] = useState<string>((initial?.tags ?? []).join(", "));
   const [status, setStatus] = useState<VisitStatus>(initial?.status ?? "prospect");
   const [firstVisitNote, setFirstVisitNote] = useState<string>("");
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   const valid = businessName.trim().length > 0;
 
   const handleSubmit = () => {
-    if (!valid) return;
+    if (!valid || submitting) return;
+    setSubmitting(true);
     onSubmit({
       businessName: businessName.trim(),
       address: address.trim(),
@@ -205,10 +207,10 @@ export default function LocationForm({ initial, onSubmit, submitLabel, showFirst
 
         <Pressable
           onPress={handleSubmit}
-          disabled={!valid}
+          disabled={!valid || submitting}
           style={({ pressed }) => [
             styles.submit,
-            !valid && { opacity: 0.4 },
+            (!valid || submitting) && { opacity: 0.4 },
             pressed && { opacity: 0.9 },
           ]}
           testID="submit-location"

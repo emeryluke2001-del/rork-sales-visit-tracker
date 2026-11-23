@@ -73,8 +73,14 @@ export default function LocationDetailScreen() {
   };
 
   const confirmDelete = () => {
-    Alert.alert("Delete location?", `${location.businessName} will be removed permanently.`, [
-      { text: "Cancel", style: "cancel" },
+    const jobsNote = location.isAccount
+      ? " Its jobs will be kept but no longer linked to an account."
+      : "";
+    Alert.alert(
+      "Delete location?",
+      `${location.businessName} will be removed permanently.${jobsNote}`,
+      [
+        { text: "Cancel", style: "cancel" },
       {
         text: "Delete",
         style: "destructive",

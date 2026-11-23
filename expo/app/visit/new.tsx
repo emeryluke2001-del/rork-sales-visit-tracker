@@ -19,6 +19,7 @@ export default function NewVisitScreen() {
   const location = useLocationById(id);
   const { addVisit } = useLocations();
   const [note, setNote] = useState<string>("");
+  const [saving, setSaving] = useState<boolean>(false);
 
   if (!location) {
     return (
@@ -29,6 +30,8 @@ export default function NewVisitScreen() {
   }
 
   const save = () => {
+    if (saving) return;
+    setSaving(true);
     addVisit(location.id, note.trim());
     router.back();
   };
@@ -67,7 +70,8 @@ export default function NewVisitScreen() {
 
         <Pressable
           onPress={save}
-          style={({ pressed }) => [styles.save, pressed && { opacity: 0.9 }]}
+          disabled={saving}
+          style={({ pressed }) => [styles.save, saving && { opacity: 0.4 }, pressed && { opacity: 0.9 }]}
           testID="save-visit"
         >
           <Check size={18} color={Colors.cream} strokeWidth={2.5} />
