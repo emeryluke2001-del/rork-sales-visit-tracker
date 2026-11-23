@@ -17,13 +17,14 @@ export type LocationFormValue = Omit<Location, "id" | "createdAt" | "updatedAt" 
 
 interface Props {
   initial?: Partial<LocationFormValue>;
-  onSubmit: (value: LocationFormValue) => void;
+  onSubmit: (value: LocationFormValue, firstVisitNote: string) => void;
   submitLabel: string;
+  showFirstVisit?: boolean;
 }
 
 const STATUSES: VisitStatus[] = ["prospect", "active", "closed", "cold"];
 
-export default function LocationForm({ initial, onSubmit, submitLabel }: Props) {
+export default function LocationForm({ initial, onSubmit, submitLabel, showFirstVisit }: Props) {
   const [businessName, setBusinessName] = useState<string>(initial?.businessName ?? "");
   const [address, setAddress] = useState<string>(initial?.address ?? "");
   const [contactName, setContactName] = useState<string>(initial?.contactName ?? "");
@@ -32,6 +33,7 @@ export default function LocationForm({ initial, onSubmit, submitLabel }: Props) 
   const [notes, setNotes] = useState<string>(initial?.notes ?? "");
   const [tagsText, setTagsText] = useState<string>((initial?.tags ?? []).join(", "));
   const [status, setStatus] = useState<VisitStatus>(initial?.status ?? "prospect");
+  const [firstVisitNote, setFirstVisitNote] = useState<string>("");
 
   const valid = businessName.trim().length > 0;
 
@@ -52,7 +54,7 @@ export default function LocationForm({ initial, onSubmit, submitLabel }: Props) 
       latitude: initial?.latitude,
       longitude: initial?.longitude,
       lastVisited: initial?.lastVisited,
-    });
+    }, firstVisitNote);
   };
 
   return (
@@ -181,6 +183,26 @@ export default function LocationForm({ initial, onSubmit, submitLabel }: Props) 
           />
         </Field>
 
+        {showFirstVisit ? (
+          <>
+            <View style={styles.sectionLabel}>
+              <Text style={styles.sectionLabelText}>FIRST VISIT</Text>
+            </View>
+            <Field label="Visit Note" hint="Optional — logged as this location's first visit">
+              <TextInput
+                value={firstVisitNote}
+                onChangeText={setFirstVisitNote}
+                placeholder="Stopped by, met Jane, dropped samples…"
+                placeholderTextColor={Colors.inkMuted}
+                style={[styles.input, styles.textarea]}
+                multiline
+                numberOfLines={4}
+                testID="input-first-visit"
+              />
+            </Field>
+          </>
+        ) : null}
+
         <Pressable
           onPress={handleSubmit}
           disabled={!valid}
@@ -202,10 +224,12 @@ export default function LocationForm({ initial, onSubmit, submitLabel }: Props) 
 function Field({
   label,
   required,
+  hint,
   children,
 }: {
   label: string;
   required?: boolean;
+  hint?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -214,6 +238,7 @@ function Field({
         {label}
         {required ? <Text style={{ color: Colors.danger }}> *</Text> : null}
       </Text>
+      {hint ? <Text style={styles.fieldHint}>{hint}</Text> : null}
       {children}
     </View>
   );
@@ -229,6 +254,7 @@ const styles = StyleSheet.create({
     marginBottom: 6,
     letterSpacing: 0.3,
   },
+  fieldHint: { fontSize: 11, color: Colors.inkMuted, marginTop: -4, marginBottom: 6 },
   input: {
     backgroundColor: Colors.paper,
     borderWidth: 1,

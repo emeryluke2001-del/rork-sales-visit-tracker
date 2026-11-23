@@ -7,7 +7,6 @@ import Colors from "@/constants/colors";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { formatMoney } from "@/types/job";
-import * as Haptics from "expo-haptics";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 
 export default function AccountsScreen() {
@@ -47,7 +46,7 @@ export default function AccountsScreen() {
           </View>
         </View>
         <Pressable
-          onPress={() => router.push("/location/new")}
+          onPress={() => router.push("/location/new?account=1")}
           style={({ pressed }) => [styles.addBtn, pressed && { opacity: 0.85 }]}
           testID="add-account-button"
         >
@@ -139,7 +138,7 @@ export default function AccountsScreen() {
             <Text style={styles.emptyText}>
               {locations.some((l) => l.isAccount)
                 ? "Try a different search."
-                : "Open a location and tap \"Convert to Account\" to turn a business into a customer."}
+                : "Tap + to add an account — its first visit note can go on the same form."}
             </Text>
           </View>
         }
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: Colors.navy,
+    backgroundColor: "#117342",
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,

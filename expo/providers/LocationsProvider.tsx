@@ -47,14 +47,26 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
   });
 
   const addLocation = useCallback(
-    (input: Omit<Location, "id" | "createdAt" | "updatedAt" | "visits">) => {
+    (
+      input: Omit<Location, "id" | "createdAt" | "updatedAt" | "visits">,
+      firstVisitNote?: string
+    ) => {
       const now = new Date().toISOString();
+      const visits: Visit[] = [];
+      let lastVisited = input.lastVisited;
+      const note = firstVisitNote?.trim();
+      if (note && note.length > 0) {
+        const visit: Visit = { id: uid(), date: now, note };
+        visits.push(visit);
+        lastVisited = visit.date;
+      }
       const loc: Location = {
         ...input,
         id: uid(),
         createdAt: now,
         updatedAt: now,
-        visits: [],
+        visits,
+        lastVisited,
       };
       const next = [loc, ...locations];
       writeMutation.mutate(next);
