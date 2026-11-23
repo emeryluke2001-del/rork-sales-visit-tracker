@@ -5,10 +5,12 @@ import { Shield, Trash2 } from "lucide-react-native";
 import Colors from "@/constants/colors";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
+import { useDayNotes } from "@/providers/DayNotesProvider";
 
 export default function PrivacyPolicyScreen() {
   const { locations, deleteAllData } = useLocations();
   const { deleteAllJobs } = useJobs();
+  const { deleteAllNotes } = useDayNotes();
 
   const confirmDeleteAll = () => {
     Alert.alert(
@@ -22,6 +24,7 @@ export default function PrivacyPolicyScreen() {
           onPress: () => {
             deleteAllJobs();
             deleteAllData();
+            deleteAllNotes();
           },
         },
       ]

@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { MapPin, BarChart3, Download } from "lucide-react-native";
+import { MapPin, BarChart3, Download, NotebookPen } from "lucide-react-native";
 import React from "react";
 import Colors from "@/constants/colors";
 import { Platform } from "react-native";
@@ -31,6 +31,13 @@ export default function SalesTabLayout() {
         options={{
           title: "Insights",
           tabBarIcon: ({ color, size }) => <BarChart3 color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="notes"
+        options={{
+          title: "Notes",
+          tabBarIcon: ({ color, size }) => <NotebookPen color={color} size={size} />,
         }}
       />
       <Tabs.Screen

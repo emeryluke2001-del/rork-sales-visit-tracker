@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { LocationsProvider } from "@/providers/LocationsProvider";
 import { JobsProvider } from "@/providers/JobsProvider";
+import { DayNotesProvider } from "@/providers/DayNotesProvider";
 import Colors from "@/constants/colors";
 
 SplashScreen.preventAutoHideAsync();
@@ -92,8 +93,10 @@ export default function RootLayout() {
         <SafeAreaProvider>
           <LocationsProvider>
             <JobsProvider>
-              <StatusBar style="dark" />
-              <RootLayoutNav />
+              <DayNotesProvider>
+                <StatusBar style="dark" />
+                <RootLayoutNav />
+              </DayNotesProvider>
             </JobsProvider>
           </LocationsProvider>
         </SafeAreaProvider>

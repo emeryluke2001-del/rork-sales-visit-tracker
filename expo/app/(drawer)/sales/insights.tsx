@@ -1,13 +1,25 @@
-import React, { useMemo } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import React, { useMemo, useState } from "react";
+import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { TrendingUp, MapPin, Users, CalendarDays, DollarSign, Wallet } from "lucide-react-native";
+import {
+  TrendingUp,
+  MapPin,
+  Users,
+  CalendarDays,
+  DollarSign,
+  Wallet,
+  ChevronDown,
+  ChevronUp,
+  NotebookPen,
+} from "lucide-react-native";
 import Colors from "@/constants/colors";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
+import { useDayNotes } from "@/providers/DayNotesProvider";
 import { STATUS_META, VisitStatus } from "@/types/location";
 import { Job, formatMoney } from "@/types/job";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
+import DayNoteModal, { dayKeyLocal, dayLabel } from "@/components/DayNoteModal";
 
 function Stat({
   icon,
@@ -37,9 +49,19 @@ function shortMonth(d: Date): string {
   return d.toLocaleDateString("en-US", { month: "short" });
 }
 
+interface DayRow {
+  key: string;
+  visits: number;
+  jobs: number;
+  paid: number;
+}
+
 export default function InsightsScreen() {
   const { locations, stats } = useLocations();
   const { jobs } = useJobs();
+  const { notes, setDayNote } = useDayNotes();
+  const [reportOpen, setReportOpen] = useState<boolean>(false);
+  const [noteDay, setNoteDay] = useState<string | null>(null);
 
   const last30 = useMemo(() => {
     const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
@@ -100,6 +122,53 @@ export default function InsightsScreen() {
 
   const maxMonth = Math.max(1, ...income.months.map((m) => m.total));
   const hasAnyIncome = income.months.some((m) => m.total > 0);
+
+  const dayRows = useMemo<DayRow[]>(() => {
+    const map = new Map<string, DayRow>();
+    const bump = (key: string): DayRow => {
+      let row = map.get(key);
+      if (!row) {
+        row = { key, visits: 0, jobs: 0, paid: 0 };
+        map.set(key, row);
+      }
+      return row;
+    };
+    for (const l of locations) {
+      for (const v of l.visits) {
+        const d = new Date(v.date);
+        if (!isNaN(d.getTime())) bump(dayKeyLocal(d)).visits += 1;
+      }
+    }
+    for (const j of jobs) {
+      if (j.stage !== "completed" && j.stage !== "paid") continue;
+      const src = j.completedDate
+        ? new Date(j.completedDate + "T12:00:00")
+        : new Date(j.updatedAt);
+      if (isNaN(src.getTime())) continue;
+      const row = bump(dayKeyLocal(src));
+      row.jobs += 1;
+      if (j.stage === "paid") row.paid += j.amount;
+    }
+    return [...map.values()].sort((a, b) => (a.key < b.key ? 1 : -1));
+  }, [locations, jobs]);
+
+  const summaryFor = (key: string): string => {
+    const r = dayRows.find((d) => d.key === key);
+    if (!r) return "No activity recorded";
+    const bits: string[] = [];
+    if (r.visits) bits.push(`${r.visits} visit${r.visits === 1 ? "" : "s"}`);
+    if (r.jobs) bits.push(`${r.jobs} job${r.jobs === 1 ? "" : "s"} done`);
+    if (r.paid > 0) bits.push(`${formatMoney(r.paid)} paid`);
+    return bits.length > 0 ? bits.join(" · ") : "No activity recorded";
+  };
+
+  const notesList = useMemo(
+    () =>
+      Object.entries(notes)
+        .filter(([, text]) => text.trim().length > 0)
+        .sort((a, b) => (a[0] < b[0] ? 1 : -1)),
+    [notes]
+  );
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
@@ -214,6 +283,100 @@ export default function InsightsScreen() {
           ) : null}
         </View>
 
+        <View style={[styles.card, styles.reportCard]}>
+          <Pressable
+            onPress={() => setReportOpen((o) => !o)}
+            style={styles.reportHeader}
+            testID="day-report-toggle"
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <CalendarDays size={16} color={Colors.navy} />
+              <Text style={styles.cardTitle}>Day Report</Text>
+            </View>
+            {reportOpen ? (
+              <ChevronUp size={18} color={Colors.inkMuted} />
+            ) : (
+              <ChevronDown size={18} color={Colors.inkMuted} />
+            )}
+          </Pressable>
+          <Text style={styles.reportSub}>
+            Days with visits or finished jobs. Tap a day to attach a note about what you
+            learned.
+          </Text>
+          {reportOpen ? (
+            dayRows.length === 0 ? (
+              <Text style={styles.empty}>
+                Nothing reported yet — log a visit or finish a job.
+              </Text>
+            ) : (
+              <View style={{ marginTop: 12 }}>
+                <View style={styles.reportHeadRow}>
+                  <Text style={[styles.reportHeadCell, { flex: 2 }]}>Day</Text>
+                  <Text style={[styles.reportHeadCell, { flex: 1, textAlign: "center" }]}>
+                    Visits
+                  </Text>
+                  <Text style={[styles.reportHeadCell, { flex: 1, textAlign: "center" }]}>
+                    Jobs
+                  </Text>
+                  <Text style={[styles.reportHeadCell, { flex: 1.2, textAlign: "right" }]}>
+                    Paid
+                  </Text>
+                </View>
+                {dayRows.map((r) => (
+                  <Pressable
+                    key={r.key}
+                    onPress={() => setNoteDay(r.key)}
+                    style={styles.reportRow}
+                    testID={`day-row-${r.key}`}
+                  >
+                    <View style={{ flex: 2, flexDirection: "row", alignItems: "center", gap: 5 }}>
+                      <Text style={styles.reportDay} numberOfLines={1}>
+                        {dayLabel(r.key)}
+                      </Text>
+                      {notes[r.key] ? <NotebookPen size={12} color="#117342" /> : null}
+                    </View>
+                    <Text style={[styles.reportCell, { flex: 1, textAlign: "center" }]}>
+                      {r.visits || "—"}
+                    </Text>
+                    <Text style={[styles.reportCell, { flex: 1, textAlign: "center" }]}>
+                      {r.jobs || "—"}
+                    </Text>
+                    <Text style={[styles.reportPaid, { flex: 1.2 }]}>
+                      {r.paid > 0 ? formatMoney(r.paid) : ""}
+                    </Text>
+                  </Pressable>
+                ))}
+              </View>
+            )
+          ) : null}
+        </View>
+
+        {notesList.length > 0 ? (
+          <View style={styles.card}>
+            <Text style={styles.cardTitle}>Day Notes</Text>
+            <View style={{ marginTop: 8 }}>
+              {notesList.map(([key, text]) => (
+                <Pressable
+                  key={key}
+                  onPress={() => setNoteDay(key)}
+                  style={styles.noteRow}
+                  testID={`note-row-${key}`}
+                >
+                  <View style={styles.noteIcon}>
+                    <NotebookPen size={14} color="#117342" />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.noteDay}>{dayLabel(key)}</Text>
+                    <Text style={styles.noteText} numberOfLines={3}>
+                      {text}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+        ) : null}
+
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Pipeline breakdown</Text>
           <View style={{ gap: 14, marginTop: 16 }}>
@@ -270,6 +433,24 @@ export default function InsightsScreen() {
           )}
         </View>
       </ScrollView>
+
+      {noteDay ? (
+        <DayNoteModal
+          key={noteDay}
+          dayKey={noteDay}
+          summary={summaryFor(noteDay)}
+          initial={notes[noteDay] ?? ""}
+          onSave={(text) => {
+            setDayNote(noteDay, text);
+            setNoteDay(null);
+          }}
+          onDelete={() => {
+            setDayNote(noteDay, "");
+            setNoteDay(null);
+          }}
+          onClose={() => setNoteDay(null)}
+        />
+      ) : null}
     </SafeAreaView>
   );
 }
@@ -310,6 +491,49 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   incomeCard: { borderWidth: 2, borderColor: "#117342" },
+  reportCard: { borderWidth: 2, borderColor: Colors.navy },
+  reportHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  reportSub: { fontSize: 12, color: Colors.inkMuted, marginTop: 6, lineHeight: 17 },
+  reportHeadRow: {
+    flexDirection: "row",
+    paddingBottom: 8,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.line,
+  },
+  reportHeadCell: {
+    fontSize: 11,
+    fontWeight: "800",
+    color: Colors.inkMuted,
+    letterSpacing: 0.6,
+  },
+  reportRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.line,
+  },
+  reportDay: { fontSize: 14, fontWeight: "700", color: Colors.ink, flexShrink: 1 },
+  reportCell: { fontSize: 14, color: Colors.inkSoft, fontWeight: "600" },
+  reportPaid: { fontSize: 13, color: "#117342", fontWeight: "800", textAlign: "right" },
+  noteRow: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 12,
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.line,
+  },
+  noteIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    backgroundColor: "#DCFCE7",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  noteDay: { fontSize: 13, fontWeight: "700", color: Colors.ink },
+  noteText: { fontSize: 13, color: Colors.inkSoft, marginTop: 3, lineHeight: 18 },
   cardTitle: { fontSize: 16, fontWeight: "700", color: Colors.ink },
   incomeRow: { flexDirection: "row", alignItems: "center", gap: 12 },
   incomeIcon: {
