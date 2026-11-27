@@ -1,7 +1,7 @@
 import createContextHook from "@nkzw/create-context-hook";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 
 const STORAGE_KEY = "routelog.daynotes.v1";
 
@@ -39,18 +39,25 @@ export const [DayNotesProvider, useDayNotes] = createContextHook(() => {
     },
   });
 
+  // Latest committed data, so rapid successive writes never work from a stale object.
+  const notesRef = useRef<DayNotes>({});
+  useEffect(() => {
+    notesRef.current = notes;
+  }, [notes]);
+
   const setDayNote = useCallback(
     (dayKey: string, note: string) => {
       const trimmed = note.trim();
-      const next: DayNotes = { ...notes };
+      const next: DayNotes = { ...notesRef.current };
       if (trimmed.length > 0) {
         next[dayKey] = trimmed;
       } else {
         delete next[dayKey];
       }
+      notesRef.current = next;
       writeMutation.mutate(next);
     },
-    [notes, writeMutation]
+    [writeMutation]
   );
 
   const deleteAllNotes = useCallback(() => {

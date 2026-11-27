@@ -9,6 +9,7 @@ import {
 } from "lucide-react-native";
 import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { THEMES, getTheme, type ThemeColors, type ThemeId } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
@@ -38,7 +39,7 @@ export default function SettingsScreen() {
   const { colors: Colors, themeId, setThemeId } = useTheme();
 
   return (
-    <View style={[styles.container, { backgroundColor: Colors.cream }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: Colors.cream }]} edges={["top"]}>
       <ScreenBackground />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
@@ -118,7 +119,7 @@ export default function SettingsScreen() {
           Sales Manager keeps everything on this device. No account, no cloud.
         </Text>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 }
 

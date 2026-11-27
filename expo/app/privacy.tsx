@@ -110,8 +110,9 @@ export default function PrivacyPolicyScreen() {
           <Text style={styles.sectionTitle}>Delete Account &amp; Data</Text>
           <Text style={styles.sectionBody}>
             Sales Manager has no accounts — everything lives on this device.
-            Deleting your account erases all {locations.length} location
-            {locations.length === 1 ? "" : "s"}, visits, and notes permanently.
+            Deleting erases all {locations.length} location
+            {locations.length === 1 ? "" : "s"}, visits, jobs, and notes
+            permanently.
           </Text>
           <Pressable
             onPress={confirmDeleteAll}
