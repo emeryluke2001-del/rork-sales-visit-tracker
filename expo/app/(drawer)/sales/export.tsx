@@ -137,7 +137,7 @@ export default function ExportScreen() {
 
         <View style={styles.hero}>
           <View style={styles.heroIcon}>
-            <FileSpreadsheet size={26} color={Colors.amber} />
+            <FileSpreadsheet size={26} color={Colors.navy} />
           </View>
           <Text style={styles.heroTitle}>CSV · Google Sheets compatible</Text>
           <Text style={styles.heroText}>
@@ -260,9 +260,11 @@ const makeStyles = (Colors: ThemeColors) =>
   title: { fontSize: 28, fontWeight: "800", color: Colors.ink, letterSpacing: -0.5 },
   subtitle: { fontSize: 13, color: Colors.inkSoft, marginTop: 4 },
   hero: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.paper,
     borderRadius: 20,
     padding: 22,
+    borderWidth: 1,
+    borderColor: Colors.line,
     marginBottom: 20,
   },
   heroIcon: {
@@ -274,11 +276,10 @@ const makeStyles = (Colors: ThemeColors) =>
     justifyContent: "center",
     marginBottom: 14,
   },
-  heroTitle: { fontSize: 17, fontWeight: "700", color: Colors.onPrimary },
+  heroTitle: { fontSize: 17, fontWeight: "700", color: Colors.ink },
   heroText: {
     fontSize: 13,
-    color: Colors.onPrimary,
-    opacity: 0.8,
+    color: Colors.inkSoft,
     marginTop: 6,
     lineHeight: 19,
   },
