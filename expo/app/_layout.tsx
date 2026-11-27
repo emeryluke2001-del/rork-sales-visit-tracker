@@ -96,7 +96,7 @@ function RootLayoutNav() {
 
 function ThemeStatusBar() {
   const { themeId } = useTheme();
-  return <StatusBar style={themeId === "midnight" ? "light" : "dark"} />;
+  return <StatusBar style={themeId === "original" ? "dark" : "light"} />;
 }
 
 export default function RootLayout() {

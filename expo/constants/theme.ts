@@ -88,25 +88,25 @@ export const midnightTheme: ThemeColors = {
   danger: "#FF6B6B",
 };
 
-/** Emerald look: whole background fades vivid green to white, yellow buttons. */
+/** Emerald look: deep-green canvas fading to vivid green at the bottom, yellow buttons. */
 export const emeraldTheme: ThemeColors = {
   cream: "transparent",
-  paper: "rgba(255,255,255,0.62)",
-  navyDeep: "#0A3D24",
+  paper: "#12502E",
+  navyDeep: "#062515",
   navy: "#F5A800",
   primary: "#FFC400",
   onPrimary: "#231A00",
   brand: "#FFB800",
-  brandText: "#9A6B00",
-  ink: "#0E2417",
-  inkSoft: "#3F5A4A",
-  inkMuted: "#7C9484",
-  line: "#D9EBDE",
+  brandText: "#FFD24D",
+  ink: "#F2FBF5",
+  inkSoft: "#C2E3CF",
+  inkMuted: "#84A992",
+  line: "#1F6B41",
   amber: "#FFC400",
   amberSoft: "#FFE45C",
-  success: "#00A63E",
-  danger: "#E5484D",
-  canvasGradient: ["#FFFFFF", "#EAFCEF", "#B7F4CE", "#4BE68C", "#00DC58"],
+  success: "#34D399",
+  danger: "#FF6B6B",
+  canvasGradient: ["#0A3A22", "#0D5230", "#0F6B3C", "#11A052", "#00DC58"],
 };
 
 export type ThemeId = "original" | "midnight" | "emerald";
@@ -114,7 +114,7 @@ export type ThemeId = "original" | "midnight" | "emerald";
 export const THEMES: { id: ThemeId; label: string; hint: string }[] = [
   { id: "original", label: "Original", hint: "Cream paper and navy" },
   { id: "midnight", label: "Midnight", hint: "Walmart blue and red" },
-  { id: "emerald", label: "Emerald", hint: "Vivid green fade to white" },
+  { id: "emerald", label: "Emerald", hint: "Green fade, yellow buttons" },
 ];
 
 export function getTheme(id: ThemeId): ThemeColors {
