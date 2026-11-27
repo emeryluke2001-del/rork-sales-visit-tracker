@@ -88,10 +88,11 @@ export const midnightTheme: ThemeColors = {
   danger: "#FF6B6B",
 };
 
-/** Emerald look: pure-white top, textured fade into vivid green, bright-yellow buttons. */
+/** Emerald look: pure-white top, textured fade into vivid green, bright-yellow buttons.
+ *  Cards share the fade via a translucent wash that reads slightly darker than the canvas. */
 export const emeraldTheme: ThemeColors = {
   cream: "transparent",
-  paper: "#FFFFFF",
+  paper: "rgba(9,58,32,0.08)",
   navyDeep: "#0A3D24",
   navy: "#FFC400",
   primary: "#FFD60A",
@@ -100,7 +101,7 @@ export const emeraldTheme: ThemeColors = {
   brandText: "#8F6B00",
   ink: "#0F1512",
   inkSoft: "#3F5A4A",
-  inkMuted: "#6F8A7B",
+  inkMuted: "#5E7D6B",
   line: "#DCE7E0",
   amber: "#FFD60A",
   amberSoft: "#FFE45C",
