@@ -4,10 +4,12 @@ import {
   ChevronRight,
   Moon,
   Shield,
+  Sprout,
   Sun,
 } from "lucide-react-native";
 import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { THEMES, type ThemeColors, type ThemeId } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
@@ -16,9 +18,16 @@ function ThemeSwatch({ colors }: { colors: ThemeColors }) {
   return (
     <View style={styles.swatchRow}>
       {[colors.cream, colors.paper, colors.navy, colors.primary, colors.brand].map(
-        (c, i) => (
-          <View key={i} style={[styles.swatch, { backgroundColor: c }]} />
-        )
+        (c, i) =>
+          i === 0 && colors.canvasGradient ? (
+            <LinearGradient
+              key={i}
+              colors={colors.canvasGradient}
+              style={styles.swatch}
+            />
+          ) : (
+            <View key={i} style={[styles.swatch, { backgroundColor: c }]} />
+          )
       )}
     </View>
   );
@@ -62,6 +71,8 @@ export default function SettingsScreen() {
                 >
                   {theme.id === "midnight" ? (
                     <Moon size={18} color={selected ? Colors.onPrimary : Colors.navy} />
+                  ) : theme.id === "emerald" ? (
+                    <Sprout size={18} color={selected ? Colors.onPrimary : Colors.navy} />
                   ) : (
                     <Sun size={18} color={selected ? Colors.onPrimary : Colors.navy} />
                   )}
@@ -70,7 +81,13 @@ export default function SettingsScreen() {
                   <Text style={[styles.themeLabel, { color: Colors.ink }]}>{theme.label}</Text>
                   <Text style={[styles.themeHint, { color: Colors.inkMuted }]}>{theme.hint}</Text>
                   <ThemeSwatch
-                    colors={theme.id === "midnight" ? MIDNIGHT_PREVIEW : ORIGINAL_PREVIEW}
+                    colors={
+                      theme.id === "midnight"
+                        ? MIDNIGHT_PREVIEW
+                        : theme.id === "emerald"
+                          ? EMERALD_PREVIEW
+                          : ORIGINAL_PREVIEW
+                    }
                   />
                 </View>
                 <View
@@ -147,6 +164,26 @@ const MIDNIGHT_PREVIEW: ThemeColors = {
   amberSoft: "#FCD34D",
   success: "#34D399",
   danger: "#FF6B6B",
+};
+
+const EMERALD_PREVIEW: ThemeColors = {
+  cream: "transparent",
+  paper: "#FFFFFF",
+  navyDeep: "#0A3D24",
+  navy: "#F5A800",
+  primary: "#00C853",
+  onPrimary: "#FFFFFF",
+  brand: "#00C24E",
+  brandText: "#008A38",
+  ink: "#0E2417",
+  inkSoft: "#3F5A4A",
+  inkMuted: "#7C9484",
+  line: "#D9EBDE",
+  amber: "#FFC400",
+  amberSoft: "#FFE45C",
+  success: "#00A63E",
+  danger: "#E5484D",
+  canvasGradient: ["#FFFFFF", "#EAFCEF", "#B7F4CE", "#4BE68C", "#00D754"],
 };
 
 const styles = StyleSheet.create({

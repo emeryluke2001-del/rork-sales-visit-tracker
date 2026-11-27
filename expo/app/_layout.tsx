@@ -5,6 +5,8 @@ import React, { useEffect } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, useTheme } from "@/providers/ThemeProvider";
 import { LocationsProvider } from "@/providers/LocationsProvider";
 import { JobsProvider } from "@/providers/JobsProvider";
@@ -17,15 +19,23 @@ const queryClient = new QueryClient();
 function RootLayoutNav() {
   const { colors: Colors } = useTheme();
   return (
-    <Stack
-      screenOptions={{
-        headerBackTitle: "Back",
-        headerStyle: { backgroundColor: Colors.cream },
-        headerTitleStyle: { color: Colors.ink, fontWeight: "700" },
-        headerTintColor: Colors.navy,
-        contentStyle: { backgroundColor: Colors.cream },
-      }}
-    >
+    <View style={{ flex: 1 }}>
+      <LinearGradient
+        pointerEvents="none"
+        colors={Colors.canvasGradient ?? ([Colors.cream, Colors.cream] as const)}
+        style={StyleSheet.absoluteFill}
+      />
+      <Stack
+        screenOptions={{
+          headerBackTitle: "Back",
+          headerStyle: { backgroundColor: Colors.cream },
+          headerTitleStyle: { color: Colors.ink, fontWeight: "700" },
+          headerTintColor: Colors.navy,
+          contentStyle: {
+            backgroundColor: Colors.canvasGradient ? "transparent" : Colors.cream,
+          },
+        }}
+      >
       <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
       <Stack.Screen
         name="location/[id]"
@@ -80,6 +90,7 @@ function RootLayoutNav() {
         }}
       />
     </Stack>
+    </View>
   );
 }
 

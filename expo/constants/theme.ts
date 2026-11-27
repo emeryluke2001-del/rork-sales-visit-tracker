@@ -3,7 +3,8 @@
  *
  * Every screen reads colors through `useTheme()` (providers/ThemeProvider)
  * instead of the static palette, so the whole app can switch between
- * "Original" (cream paper look) and "Midnight" (deep petrol and teal look).
+ * "Original" (cream paper look), "Midnight" (Walmart blue with red accents)
+ * and "Emerald" (vivid green fading up into white, yellow accents).
  *
  * Token roles (kept identical across themes):
  * - cream      app background (canvas)
@@ -22,6 +23,10 @@
  * - amberSoft  light amber (used on `navyDeep`)
  * - success    positive state
  * - danger     destructive state
+ *
+ * Optional per theme:
+ * - canvasGradient  top-to-bottom gradient behind every screen. When present,
+ *   `cream` is "transparent" so the root backdrop shows through.
  */
 export type ThemeColors = {
   cream: string;
@@ -40,6 +45,7 @@ export type ThemeColors = {
   amberSoft: string;
   success: string;
   danger: string;
+  canvasGradient?: readonly [string, string, ...string[]];
 };
 
 /** The original cream/paper look. */
@@ -82,13 +88,37 @@ export const midnightTheme: ThemeColors = {
   danger: "#FF6B6B",
 };
 
-export type ThemeId = "original" | "midnight";
+/** Emerald look: vivid green fading up into white, yellow accents. */
+export const emeraldTheme: ThemeColors = {
+  cream: "transparent",
+  paper: "#FFFFFF",
+  navyDeep: "#0A3D24",
+  navy: "#F5A800",
+  primary: "#00C853",
+  onPrimary: "#FFFFFF",
+  brand: "#00C24E",
+  brandText: "#008A38",
+  ink: "#0E2417",
+  inkSoft: "#3F5A4A",
+  inkMuted: "#7C9484",
+  line: "#D9EBDE",
+  amber: "#FFC400",
+  amberSoft: "#FFE45C",
+  success: "#00A63E",
+  danger: "#E5484D",
+  canvasGradient: ["#FFFFFF", "#EAFCEF", "#B7F4CE", "#4BE68C", "#00D754"],
+};
+
+export type ThemeId = "original" | "midnight" | "emerald";
 
 export const THEMES: { id: ThemeId; label: string; hint: string }[] = [
   { id: "original", label: "Original", hint: "Cream paper and navy" },
   { id: "midnight", label: "Midnight", hint: "Walmart blue and red" },
+  { id: "emerald", label: "Emerald", hint: "Vivid green fade to white" },
 ];
 
 export function getTheme(id: ThemeId): ThemeColors {
-  return id === "midnight" ? midnightTheme : lightTheme;
+  if (id === "midnight") return midnightTheme;
+  if (id === "emerald") return emeraldTheme;
+  return lightTheme;
 }
