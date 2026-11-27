@@ -62,31 +62,31 @@ export const lightTheme: ThemeColors = {
   danger: "#DC2626",
 };
 
-/** Medium dark blue look: dark blue canvas, light text, tuned accents. */
+/** Medium dark blue look: vivid blue canvas, light text, tuned accents. */
 export const midnightTheme: ThemeColors = {
-  cream: "#1A3055",
-  paper: "#24406B",
-  navyDeep: "#122544",
-  navy: "#9DBCF2",
-  primary: "#2E5FAE",
-  onPrimary: "#F2F6FF",
-  brand: "#16A34A",
-  brandText: "#4ADE80",
-  ink: "#E9EFFA",
-  inkSoft: "#B7C6E4",
-  inkMuted: "#8195BD",
-  line: "#31497A",
-  amber: "#FBBF24",
+  cream: "#15336B",
+  paper: "#1E4386",
+  navyDeep: "#0B1F47",
+  navy: "#7FB2FF",
+  primary: "#2E6BE6",
+  onPrimary: "#F5F9FF",
+  brand: "#22C55E",
+  brandText: "#5EEA9E",
+  ink: "#EEF4FF",
+  inkSoft: "#C3D3F5",
+  inkMuted: "#8FA8D8",
+  line: "#3B5CB0",
+  amber: "#FFC53D",
   amberSoft: "#FCD34D",
   success: "#34D399",
-  danger: "#F87171",
+  danger: "#FF6B6B",
 };
 
 export type ThemeId = "original" | "midnight";
 
 export const THEMES: { id: ThemeId; label: string; hint: string }[] = [
   { id: "original", label: "Original", hint: "Cream paper and navy" },
-  { id: "midnight", label: "Midnight", hint: "Medium dark blue" },
+  { id: "midnight", label: "Midnight", hint: "Vivid dark blue" },
 ];
 
 export function getTheme(id: ThemeId): ThemeColors {

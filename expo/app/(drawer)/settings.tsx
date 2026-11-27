@@ -10,6 +10,7 @@ import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { THEMES, type ThemeColors, type ThemeId } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
+import DrawerMenuButton from "@/components/DrawerMenuButton";
 
 function ThemeSwatch({ colors }: { colors: ThemeColors }) {
   return (
@@ -29,6 +30,14 @@ export default function SettingsScreen() {
   return (
     <View style={[styles.container, { backgroundColor: Colors.cream }]}>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+        <View style={styles.headerRow}>
+          <DrawerMenuButton />
+          <View style={{ flex: 1 }}>
+            <Text style={[styles.title, { color: Colors.ink }]}>Settings</Text>
+            <Text style={[styles.subtitle, { color: Colors.inkSoft }]}>Theme and app info</Text>
+          </View>
+        </View>
+
         <Text style={[styles.sectionTitle, { color: Colors.inkSoft }]}>Appearance</Text>
         <View style={[styles.card, { backgroundColor: Colors.paper, borderColor: Colors.line }]}>
           {THEMES.map((theme, index) => {
@@ -122,27 +131,36 @@ const ORIGINAL_PREVIEW: ThemeColors = {
 };
 
 const MIDNIGHT_PREVIEW: ThemeColors = {
-  cream: "#1A3055",
-  paper: "#24406B",
-  navyDeep: "#122544",
-  navy: "#9DBCF2",
-  primary: "#2E5FAE",
-  onPrimary: "#F2F6FF",
-  brand: "#16A34A",
-  brandText: "#4ADE80",
-  ink: "#E9EFFA",
-  inkSoft: "#B7C6E4",
-  inkMuted: "#8195BD",
-  line: "#31497A",
-  amber: "#FBBF24",
+  cream: "#15336B",
+  paper: "#1E4386",
+  navyDeep: "#0B1F47",
+  navy: "#7FB2FF",
+  primary: "#2E6BE6",
+  onPrimary: "#F5F9FF",
+  brand: "#22C55E",
+  brandText: "#5EEA9E",
+  ink: "#EEF4FF",
+  inkSoft: "#C3D3F5",
+  inkMuted: "#8FA8D8",
+  line: "#3B5CB0",
+  amber: "#FFC53D",
   amberSoft: "#FCD34D",
   success: "#34D399",
-  danger: "#F87171",
+  danger: "#FF6B6B",
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
   content: { padding: 20, paddingBottom: 40 },
+  headerRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginLeft: -8,
+    marginBottom: 16,
+  },
+  title: { fontSize: 24, fontWeight: "800", letterSpacing: -0.5 },
+  subtitle: { fontSize: 12, marginTop: 2 },
   sectionTitle: {
     fontSize: 12,
     fontWeight: "800",
