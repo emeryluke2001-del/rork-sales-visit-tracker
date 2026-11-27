@@ -62,31 +62,31 @@ export const lightTheme: ThemeColors = {
   danger: "#DC2626",
 };
 
-/** Midnight look: deep petrol canvas, teal interactive, brass accents. */
+/** Midnight look: lighter slate-blue canvas with red accents. */
 export const midnightTheme: ThemeColors = {
-  cream: "#112433",
-  paper: "#1C3346",
-  navyDeep: "#0B1826",
-  navy: "#5EEAD4",
-  primary: "#1F8A80",
-  onPrimary: "#F2FAF8",
+  cream: "#24364A",
+  paper: "#2F4459",
+  navyDeep: "#1A2937",
+  navy: "#F97066",
+  primary: "#D64545",
+  onPrimary: "#FFF7F5",
   brand: "#22C55E",
   brandText: "#5EEA9E",
-  ink: "#EAF1F4",
-  inkSoft: "#B9C9D4",
-  inkMuted: "#7E94A5",
-  line: "#2E4459",
-  amber: "#E8B33C",
+  ink: "#EEF3F7",
+  inkSoft: "#C0CFDC",
+  inkMuted: "#8CA1B3",
+  line: "#40566C",
+  amber: "#F0A93C",
   amberSoft: "#FCD34D",
   success: "#34D399",
-  danger: "#F26D6D",
+  danger: "#FF6B6B",
 };
 
 export type ThemeId = "original" | "midnight";
 
 export const THEMES: { id: ThemeId; label: string; hint: string }[] = [
   { id: "original", label: "Original", hint: "Cream paper and navy" },
-  { id: "midnight", label: "Midnight", hint: "Petrol, teal and brass" },
+  { id: "midnight", label: "Midnight", hint: "Slate blue with red accents" },
 ];
 
 export function getTheme(id: ThemeId): ThemeColors {

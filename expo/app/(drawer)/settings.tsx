@@ -131,22 +131,22 @@ const ORIGINAL_PREVIEW: ThemeColors = {
 };
 
 const MIDNIGHT_PREVIEW: ThemeColors = {
-  cream: "#112433",
-  paper: "#1C3346",
-  navyDeep: "#0B1826",
-  navy: "#5EEAD4",
-  primary: "#1F8A80",
-  onPrimary: "#F2FAF8",
+  cream: "#24364A",
+  paper: "#2F4459",
+  navyDeep: "#1A2937",
+  navy: "#F97066",
+  primary: "#D64545",
+  onPrimary: "#FFF7F5",
   brand: "#22C55E",
   brandText: "#5EEA9E",
-  ink: "#EAF1F4",
-  inkSoft: "#B9C9D4",
-  inkMuted: "#7E94A5",
-  line: "#2E4459",
-  amber: "#E8B33C",
+  ink: "#EEF3F7",
+  inkSoft: "#C0CFDC",
+  inkMuted: "#8CA1B3",
+  line: "#40566C",
+  amber: "#F0A93C",
   amberSoft: "#FCD34D",
   success: "#34D399",
-  danger: "#F26D6D",
+  danger: "#FF6B6B",
 };
 
 const styles = StyleSheet.create({
