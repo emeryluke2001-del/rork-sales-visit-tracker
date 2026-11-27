@@ -7,6 +7,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { Svg, Defs, Pattern, Circle, Rect as SvgRect } from "react-native-svg";
 import { ThemeProvider, useTheme } from "@/providers/ThemeProvider";
 import { ThemeProvider as NavThemeProvider, DarkTheme } from "@react-navigation/native";
 import { LocationsProvider } from "@/providers/LocationsProvider";
@@ -38,6 +39,17 @@ function RootLayoutNav() {
         colors={Colors.canvasGradient ?? ([Colors.cream, Colors.cream] as const)}
         style={StyleSheet.absoluteFill}
       />
+      {Colors.canvasGradient ? (
+        <Svg style={StyleSheet.absoluteFill} pointerEvents="none">
+          <Defs>
+            <Pattern id="emeraldDots" width="9" height="9" patternUnits="userSpaceOnUse">
+              <Circle cx="2" cy="2" r="0.9" fill="#FFFFFF" fillOpacity="0.55" />
+              <Circle cx="6.5" cy="6.5" r="0.7" fill="#0A3D24" fillOpacity="0.18" />
+            </Pattern>
+          </Defs>
+          <SvgRect width="100%" height="100%" fill="url(#emeraldDots)" opacity="0.5" />
+        </Svg>
+      ) : null}
       <Stack
         screenOptions={{
           headerBackTitle: "Back",
@@ -110,7 +122,7 @@ function RootLayoutNav() {
 
 function ThemeStatusBar() {
   const { themeId } = useTheme();
-  return <StatusBar style={themeId === "original" ? "dark" : "light"} />;
+  return <StatusBar style={themeId === "midnight" ? "light" : "dark"} />;
 }
 
 export default function RootLayout() {

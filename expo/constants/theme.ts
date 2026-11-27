@@ -88,25 +88,25 @@ export const midnightTheme: ThemeColors = {
   danger: "#FF6B6B",
 };
 
-/** Emerald look: deep-green canvas fading to vivid green at the bottom, yellow buttons. */
+/** Emerald look: pure-white top, textured fade into vivid green, bright-yellow buttons. */
 export const emeraldTheme: ThemeColors = {
   cream: "transparent",
-  paper: "#12502E",
-  navyDeep: "#062515",
-  navy: "#F5A800",
-  primary: "#FFC400",
-  onPrimary: "#231A00",
-  brand: "#FFB800",
-  brandText: "#FFD24D",
-  ink: "#F2FBF5",
-  inkSoft: "#C2E3CF",
-  inkMuted: "#84A992",
-  line: "#1F6B41",
-  amber: "#FFC400",
+  paper: "#FFFFFF",
+  navyDeep: "#0A3D24",
+  navy: "#FFC400",
+  primary: "#FFD60A",
+  onPrimary: "#1A1400",
+  brand: "#FFD60A",
+  brandText: "#8F6B00",
+  ink: "#0F1512",
+  inkSoft: "#3F5A4A",
+  inkMuted: "#6F8A7B",
+  line: "#DCE7E0",
+  amber: "#FFD60A",
   amberSoft: "#FFE45C",
-  success: "#34D399",
-  danger: "#FF6B6B",
-  canvasGradient: ["#0A3A22", "#0D5230", "#0F6B3C", "#11A052", "#00DC58"],
+  success: "#00A63E",
+  danger: "#E5484D",
+  canvasGradient: ["#FFFFFF", "#F2FCF6", "#C9F6DA", "#55E98D", "#00DC58"],
 };
 
 export type ThemeId = "original" | "midnight" | "emerald";
@@ -114,7 +114,7 @@ export type ThemeId = "original" | "midnight" | "emerald";
 export const THEMES: { id: ThemeId; label: string; hint: string }[] = [
   { id: "original", label: "Original", hint: "Cream paper and navy" },
   { id: "midnight", label: "Midnight", hint: "Walmart blue and red" },
-  { id: "emerald", label: "Emerald", hint: "Green fade, yellow buttons" },
+  { id: "emerald", label: "Emerald", hint: "White to green fade, yellow" },
 ];
 
 export function getTheme(id: ThemeId): ThemeColors {
