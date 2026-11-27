@@ -3,7 +3,7 @@
  *
  * Every screen reads colors through `useTheme()` (providers/ThemeProvider)
  * instead of the static palette, so the whole app can switch between
- * "Original" (cream paper look) and "Midnight" (medium dark blue look).
+ * "Original" (cream paper look) and "Midnight" (deep petrol and teal look).
  *
  * Token roles (kept identical across themes):
  * - cream      app background (canvas)
@@ -62,31 +62,31 @@ export const lightTheme: ThemeColors = {
   danger: "#DC2626",
 };
 
-/** Medium dark blue look: vivid blue canvas, light text, tuned accents. */
+/** Midnight look: deep petrol canvas, teal interactive, brass accents. */
 export const midnightTheme: ThemeColors = {
-  cream: "#15336B",
-  paper: "#1E4386",
-  navyDeep: "#0B1F47",
-  navy: "#7FB2FF",
-  primary: "#2E6BE6",
-  onPrimary: "#F5F9FF",
+  cream: "#112433",
+  paper: "#1C3346",
+  navyDeep: "#0B1826",
+  navy: "#5EEAD4",
+  primary: "#1F8A80",
+  onPrimary: "#F2FAF8",
   brand: "#22C55E",
   brandText: "#5EEA9E",
-  ink: "#EEF4FF",
-  inkSoft: "#C3D3F5",
-  inkMuted: "#8FA8D8",
-  line: "#3B5CB0",
-  amber: "#FFC53D",
+  ink: "#EAF1F4",
+  inkSoft: "#B9C9D4",
+  inkMuted: "#7E94A5",
+  line: "#2E4459",
+  amber: "#E8B33C",
   amberSoft: "#FCD34D",
   success: "#34D399",
-  danger: "#FF6B6B",
+  danger: "#F26D6D",
 };
 
 export type ThemeId = "original" | "midnight";
 
 export const THEMES: { id: ThemeId; label: string; hint: string }[] = [
   { id: "original", label: "Original", hint: "Cream paper and navy" },
-  { id: "midnight", label: "Midnight", hint: "Vivid dark blue" },
+  { id: "midnight", label: "Midnight", hint: "Petrol, teal and brass" },
 ];
 
 export function getTheme(id: ThemeId): ThemeColors {
