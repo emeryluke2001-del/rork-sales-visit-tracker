@@ -275,7 +275,8 @@ const makeStyles = (Colors: ThemeColors) =>
   heroTitle: { fontSize: 17, fontWeight: "700", color: Colors.onPrimary },
   heroText: {
     fontSize: 13,
-    color: "rgba(250,247,242,0.75)",
+    color: Colors.onPrimary,
+    opacity: 0.8,
     marginTop: 6,
     lineHeight: 19,
   },

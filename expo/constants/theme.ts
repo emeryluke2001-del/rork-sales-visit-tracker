@@ -88,16 +88,16 @@ export const midnightTheme: ThemeColors = {
   danger: "#FF6B6B",
 };
 
-/** Emerald look: vivid green fading up into white, yellow accents. */
+/** Emerald look: whole background fades vivid green to white, yellow buttons. */
 export const emeraldTheme: ThemeColors = {
   cream: "transparent",
-  paper: "#FFFFFF",
+  paper: "rgba(255,255,255,0.62)",
   navyDeep: "#0A3D24",
   navy: "#F5A800",
-  primary: "#00C853",
-  onPrimary: "#FFFFFF",
-  brand: "#00C24E",
-  brandText: "#008A38",
+  primary: "#FFC400",
+  onPrimary: "#231A00",
+  brand: "#FFB800",
+  brandText: "#9A6B00",
   ink: "#0E2417",
   inkSoft: "#3F5A4A",
   inkMuted: "#7C9484",
@@ -106,7 +106,7 @@ export const emeraldTheme: ThemeColors = {
   amberSoft: "#FFE45C",
   success: "#00A63E",
   danger: "#E5484D",
-  canvasGradient: ["#FFFFFF", "#EAFCEF", "#B7F4CE", "#4BE68C", "#00D754"],
+  canvasGradient: ["#FFFFFF", "#EAFCEF", "#B7F4CE", "#4BE68C", "#00DC58"],
 };
 
 export type ThemeId = "original" | "midnight" | "emerald";
