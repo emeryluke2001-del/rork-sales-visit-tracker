@@ -353,7 +353,7 @@ const makeStyles = (Colors: ThemeColors) =>
     paddingHorizontal: 10,
     borderRadius: 12,
   },
-  modalRowActive: { backgroundColor: "#DCFCE7" },
+  modalRowActive: { backgroundColor: "rgba(52,211,153,0.16)" },
   modalRowTitle: { fontSize: 15, fontWeight: "600", color: Colors.ink },
   modalRowSub: { fontSize: 12, color: Colors.inkSoft, marginTop: 2 },
   modalEmpty: { fontSize: 14, color: Colors.inkSoft, paddingVertical: 12, lineHeight: 20 },

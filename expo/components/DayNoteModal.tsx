@@ -144,7 +144,7 @@ const makeStyles = (Colors: ThemeColors) =>
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderRadius: 12,
-    backgroundColor: "#FEE2E2",
+    backgroundColor: "rgba(239,68,68,0.16)",
   },
   deleteText: { color: Colors.danger, fontWeight: "700", fontSize: 14 },
   saveBtn: {

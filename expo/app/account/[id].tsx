@@ -90,7 +90,7 @@ export default function AccountDetailScreen() {
         contentContainerStyle={styles.content}
       >
         <View style={styles.hero}>
-          <View style={[styles.badge, { backgroundColor: "#DCFCE7" }]}>
+          <View style={[styles.badge, { backgroundColor: "rgba(52,211,153,0.16)" }]}>
             <Text style={[styles.badgeText, { color: Colors.brandText }]}>Account</Text>
           </View>
           <Text style={styles.heroName}>{location.businessName}</Text>

@@ -70,7 +70,7 @@ function LocationCard({ item, onPress }: { item: Location; onPress: () => void }
             <Text style={[styles.badgeText, { color: meta.color }]}>{meta.label}</Text>
           </View>
           {item.isAccount ? (
-            <View style={[styles.badge, { backgroundColor: "#DCFCE7" }]}>
+            <View style={[styles.badge, { backgroundColor: "rgba(52,211,153,0.16)" }]}>
               <Text style={[styles.badgeText, { color: Colors.brandText }]}>Account</Text>
             </View>
           ) : null}

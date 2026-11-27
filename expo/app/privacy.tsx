@@ -202,7 +202,7 @@ const makeStyles = (Colors: ThemeColors) =>
     paddingHorizontal: 8,
   },
   deleteSection: {
-    borderColor: "#FECACA",
+    borderColor: "rgba(239,68,68,0.35)",
   },
   emailLink: {
     color: Colors.navy,
@@ -218,7 +218,7 @@ const makeStyles = (Colors: ThemeColors) =>
     borderRadius: 12,
     borderWidth: 1,
     borderColor: Colors.danger,
-    backgroundColor: "#FEF2F2",
+    backgroundColor: "rgba(239,68,68,0.12)",
   },
   deleteBtnText: {
     color: Colors.danger,

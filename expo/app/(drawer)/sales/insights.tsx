@@ -213,7 +213,7 @@ export default function InsightsScreen() {
           <Text style={styles.cardTitle}>Income</Text>
           <View style={{ gap: 14, marginTop: 16 }}>
             <View style={styles.incomeRow}>
-              <View style={[styles.incomeIcon, { backgroundColor: "#DCFCE7" }]}>
+              <View style={[styles.incomeIcon, { backgroundColor: "rgba(52,211,153,0.16)" }]}>
                 <DollarSign size={16} color={Colors.brandText} />
               </View>
               <View style={{ flex: 1 }}>
@@ -224,29 +224,29 @@ export default function InsightsScreen() {
               </View>
             </View>
             <View style={styles.incomeRow}>
-              <View style={[styles.incomeIcon, { backgroundColor: "#FEF3C7" }]}>
-                <DollarSign size={16} color="#92400E" />
+              <View style={[styles.incomeIcon, { backgroundColor: "rgba(251,191,36,0.16)" }]}>
+                <DollarSign size={16} color={Colors.amber} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.incomeLabel}>Paid last month</Text>
-                <Text style={[styles.incomeValue, { color: "#92400E" }]}>
+                <Text style={[styles.incomeValue, { color: Colors.ink }]}>
                   {formatMoney(income.paidLastMonth)}
                 </Text>
               </View>
             </View>
             <View style={styles.incomeRow}>
-              <View style={[styles.incomeIcon, { backgroundColor: "#E0E7FF" }]}>
-                <TrendingUp size={16} color="#0E1F3A" />
+              <View style={[styles.incomeIcon, { backgroundColor: "rgba(99,102,241,0.16)" }]}>
+                <TrendingUp size={16} color={Colors.navy} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.incomeLabel}>Paid this year</Text>
-                <Text style={[styles.incomeValue, { color: "#0E1F3A" }]}>
+                <Text style={[styles.incomeValue, { color: Colors.ink }]}>
                   {formatMoney(income.paidThisYear)}
                 </Text>
               </View>
             </View>
             <View style={styles.incomeRow}>
-              <View style={[styles.incomeIcon, { backgroundColor: "#FEE2E2" }]}>
+              <View style={[styles.incomeIcon, { backgroundColor: "rgba(239,68,68,0.16)" }]}>
                 <Wallet size={16} color={Colors.danger} />
               </View>
               <View style={{ flex: 1 }}>
@@ -534,7 +534,7 @@ const makeStyles = (Colors: ThemeColors) =>
     width: 32,
     height: 32,
     borderRadius: 10,
-    backgroundColor: "#DCFCE7",
+    backgroundColor: "rgba(52,211,153,0.16)",
     alignItems: "center",
     justifyContent: "center",
   },
