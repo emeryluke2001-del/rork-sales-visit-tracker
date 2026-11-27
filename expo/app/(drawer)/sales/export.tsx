@@ -20,13 +20,16 @@ import * as Clipboard from "expo-clipboard";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
 import * as Haptics from "expo-haptics";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { locationsToCSV, jobsToCSV } from "@/utils/csv";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 
 export default function ExportScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { locations } = useLocations();
   const { jobs } = useJobs();
   const [copied, setCopied] = useState<string | null>(null);
@@ -150,9 +153,9 @@ export default function ExportScreen() {
             testID="copy-csv"
           >
             {copied === "locations" ? (
-              <Check size={18} color={Colors.cream} strokeWidth={2.5} />
+              <Check size={18} color={Colors.onPrimary} strokeWidth={2.5} />
             ) : (
-              <Copy size={18} color={Colors.cream} strokeWidth={2.5} />
+              <Copy size={18} color={Colors.onPrimary} strokeWidth={2.5} />
             )}
             <Text style={styles.primaryBtnText}>
               {copied === "locations" ? "Copied to clipboard" : "Copy Locations CSV"}
@@ -179,9 +182,9 @@ export default function ExportScreen() {
             testID="copy-jobs-csv"
           >
             {copied === "jobs" ? (
-              <Check size={18} color={Colors.cream} strokeWidth={2.5} />
+              <Check size={18} color={Colors.onPrimary} strokeWidth={2.5} />
             ) : (
-              <Copy size={18} color={Colors.cream} strokeWidth={2.5} />
+              <Copy size={18} color={Colors.onPrimary} strokeWidth={2.5} />
             )}
             <Text style={styles.primaryBtnText}>
               {copied === "jobs" ? "Copied to clipboard" : "Copy Jobs CSV"}
@@ -235,6 +238,8 @@ export default function ExportScreen() {
 }
 
 function Step({ n, text }: { n: number; text: string }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   return (
     <View style={styles.stepRow}>
       <View style={styles.stepBadge}>
@@ -245,14 +250,15 @@ function Step({ n, text }: { n: number; text: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   content: { padding: 20, paddingBottom: 100 },
   headerRow: { flexDirection: "row", alignItems: "flex-start", gap: 4, marginBottom: 16, marginLeft: -8 },
   title: { fontSize: 28, fontWeight: "800", color: Colors.ink, letterSpacing: -0.5 },
   subtitle: { fontSize: 13, color: Colors.inkSoft, marginTop: 4 },
   hero: {
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.primary,
     borderRadius: 20,
     padding: 22,
     marginBottom: 20,
@@ -266,7 +272,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 14,
   },
-  heroTitle: { fontSize: 17, fontWeight: "700", color: Colors.cream },
+  heroTitle: { fontSize: 17, fontWeight: "700", color: Colors.onPrimary },
   heroText: {
     fontSize: 13,
     color: "rgba(250,247,242,0.75)",
@@ -282,7 +288,7 @@ const styles = StyleSheet.create({
   },
   actions: { gap: 10, marginBottom: 20 },
   primaryBtn: {
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.primary,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -291,7 +297,7 @@ const styles = StyleSheet.create({
     borderRadius: 14,
   },
   greenBtn: {
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -299,7 +305,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     borderRadius: 14,
   },
-  primaryBtnText: { color: Colors.cream, fontSize: 15, fontWeight: "700" },
+  primaryBtnText: { color: Colors.onPrimary, fontSize: 15, fontWeight: "700" },
   secondaryBtn: {
     backgroundColor: Colors.paper,
     borderWidth: 1,
@@ -364,4 +370,4 @@ const styles = StyleSheet.create({
     fontFamily: Platform.select({ ios: "Menlo", android: "monospace", default: "monospace" }),
     lineHeight: 16,
   },
-});
+  });

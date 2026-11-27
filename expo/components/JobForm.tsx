@@ -12,7 +12,8 @@ import {
   FlatList,
 } from "react-native";
 import { Check, ChevronDown } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocations } from "@/providers/LocationsProvider";
 import { Job, JobStage, STAGE_META, STAGE_ORDER } from "@/types/job";
 
@@ -25,6 +26,8 @@ interface Props {
 }
 
 export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { locations } = useLocations();
   const accounts = useMemo(() => locations.filter((l) => l.isAccount), [locations]);
 
@@ -218,7 +221,7 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
           ]}
           testID="submit-job"
         >
-          <Check size={18} color={Colors.cream} strokeWidth={2.5} />
+          <Check size={18} color={Colors.onPrimary} strokeWidth={2.5} />
           <Text style={styles.submitText}>{submitLabel}</Text>
         </Pressable>
 
@@ -250,7 +253,7 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
                         </Text>
                       ) : null}
                     </View>
-                    {item.id === accountId ? <Check size={16} color="#117342" /> : null}
+                    {item.id === accountId ? <Check size={16} color={Colors.brandText} /> : null}
                   </Pressable>
                 )}
               />
@@ -267,7 +270,8 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   content: { padding: 20, paddingBottom: 60, gap: 4 },
   field: { marginBottom: 14 },
   fieldLabel: {
@@ -317,7 +321,7 @@ const styles = StyleSheet.create({
   stageChipText: { fontSize: 13, color: Colors.inkSoft, fontWeight: "600" },
   submit: {
     marginTop: 16,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     borderRadius: 14,
     paddingVertical: 15,
     flexDirection: "row",
@@ -325,7 +329,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
   },
-  submitText: { color: Colors.cream, fontSize: 15, fontWeight: "700" },
+  submitText: { color: Colors.onPrimary, fontSize: 15, fontWeight: "700" },
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(8,19,39,0.5)",
@@ -355,4 +359,4 @@ const styles = StyleSheet.create({
   modalEmpty: { fontSize: 14, color: Colors.inkSoft, paddingVertical: 12, lineHeight: 20 },
   modalClear: { alignItems: "center", paddingTop: 12, borderTopWidth: 1, borderTopColor: Colors.line, marginTop: 8 },
   modalClearText: { fontSize: 13, color: Colors.danger, fontWeight: "600" },
-});
+  });

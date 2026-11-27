@@ -1,9 +1,10 @@
 import { Drawer } from "expo-router/drawer";
-import { Briefcase, Building2, MapPin } from "lucide-react-native";
+import { Briefcase, Building2, MapPin, Settings } from "lucide-react-native";
 import React from "react";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function DrawerLayout() {
+  const { colors: Colors } = useTheme();
   return (
     <Drawer
       screenOptions={{
@@ -35,6 +36,13 @@ export default function DrawerLayout() {
         options={{
           title: "Accounts",
           drawerIcon: ({ color, size }) => <Building2 color={color} size={size} />,
+        }}
+      />
+      <Drawer.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          drawerIcon: ({ color, size }) => <Settings color={color} size={size} />,
         }}
       />
     </Drawer>

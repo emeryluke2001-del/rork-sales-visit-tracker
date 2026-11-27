@@ -3,9 +3,12 @@ import { router, useLocalSearchParams } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import JobForm from "@/components/JobForm";
 import { useJobById, useJobs } from "@/providers/JobsProvider";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 
 export default function EditJobScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { id } = useLocalSearchParams<{ id: string }>();
   const job = useJobById(id);
   const { updateJob } = useJobs();
@@ -30,7 +33,8 @@ export default function EditJobScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  empty: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: Colors.cream },
-  emptyText: { color: Colors.inkSoft },
-});
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
+    empty: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: Colors.cream },
+    emptyText: { color: Colors.inkSoft },
+  });

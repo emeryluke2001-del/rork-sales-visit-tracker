@@ -9,7 +9,8 @@ import {
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
 import { Calendar, Pencil, Trash2, Building2 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useJobById, useJobs } from "@/providers/JobsProvider";
 import { useLocationById } from "@/providers/LocationsProvider";
 import { STAGE_META, STAGE_ORDER, formatMoney } from "@/types/job";
@@ -22,6 +23,8 @@ function fmtDate(iso?: string): string {
 }
 
 export default function JobDetailScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { id } = useLocalSearchParams<{ id: string }>();
   const job = useJobById(id);
   const { updateJob, deleteJob } = useJobs();
@@ -158,7 +161,8 @@ export default function JobDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   content: { padding: 20, paddingBottom: 60, gap: 14 },
   notFound: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: Colors.cream },
   notFoundText: { color: Colors.inkSoft },
@@ -178,7 +182,7 @@ const styles = StyleSheet.create({
   },
   badgeText: { fontSize: 11, fontWeight: "700", letterSpacing: 0.5, textTransform: "uppercase" },
   heroTitle: { fontSize: 22, fontWeight: "800", color: Colors.ink, letterSpacing: -0.3 },
-  heroAmount: { fontSize: 26, fontWeight: "800", color: "#117342" },
+  heroAmount: { fontSize: 26, fontWeight: "800", color: Colors.brandText },
   card: {
     backgroundColor: Colors.paper,
     borderRadius: 16,
@@ -219,4 +223,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.paper,
   },
   deleteText: { color: Colors.danger, fontSize: 14, fontWeight: "700" },
-});
+  });

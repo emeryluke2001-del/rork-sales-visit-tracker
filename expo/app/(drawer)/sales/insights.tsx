@@ -12,7 +12,8 @@ import {
   ChevronUp,
   NotebookPen,
 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { useDayNotes } from "@/providers/DayNotesProvider";
@@ -30,6 +31,8 @@ function Stat({
   label: string;
   value: string;
 }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   return (
     <View style={styles.stat}>
       <View style={styles.statIcon}>
@@ -57,6 +60,8 @@ interface DayRow {
 }
 
 export default function InsightsScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { locations, stats } = useLocations();
   const { jobs } = useJobs();
   const { notes, setDayNote } = useDayNotes();
@@ -209,11 +214,11 @@ export default function InsightsScreen() {
           <View style={{ gap: 14, marginTop: 16 }}>
             <View style={styles.incomeRow}>
               <View style={[styles.incomeIcon, { backgroundColor: "#DCFCE7" }]}>
-                <DollarSign size={16} color="#117342" />
+                <DollarSign size={16} color={Colors.brandText} />
               </View>
               <View style={{ flex: 1 }}>
                 <Text style={styles.incomeLabel}>Paid this month</Text>
-                <Text style={[styles.incomeValue, { color: "#117342" }]}>
+                <Text style={[styles.incomeValue, { color: Colors.brandText }]}>
                   {formatMoney(income.paidThisMonth)}
                 </Text>
               </View>
@@ -266,7 +271,7 @@ export default function InsightsScreen() {
                   <View
                     style={[
                       styles.bar,
-                      { height: h, backgroundColor: m.total > 0 ? (isLast ? "#117342" : Colors.amber) : Colors.line },
+                      { height: h, backgroundColor: m.total > 0 ? (isLast ? Colors.brand : Colors.amber) : Colors.line },
                     ]}
                   />
                   <Text style={[styles.barLabel, isLast && { color: Colors.ink, fontWeight: "700" }]}>
@@ -333,7 +338,7 @@ export default function InsightsScreen() {
                       <Text style={styles.reportDay} numberOfLines={1}>
                         {dayLabel(r.key)}
                       </Text>
-                      {notes[r.key] ? <NotebookPen size={12} color="#117342" /> : null}
+                      {notes[r.key] ? <NotebookPen size={12} color={Colors.brandText} /> : null}
                     </View>
                     <Text style={[styles.reportCell, { flex: 1, textAlign: "center" }]}>
                       {r.visits || "—"}
@@ -363,7 +368,7 @@ export default function InsightsScreen() {
                   testID={`note-row-${key}`}
                 >
                   <View style={styles.noteIcon}>
-                    <NotebookPen size={14} color="#117342" />
+                    <NotebookPen size={14} color={Colors.brandText} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.noteDay}>{dayLabel(key)}</Text>
@@ -455,7 +460,8 @@ export default function InsightsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   content: { padding: 20, paddingBottom: 100 },
   headerRow: { flexDirection: "row", alignItems: "flex-start", gap: 4, marginBottom: 16, marginLeft: -8 },
@@ -490,7 +496,7 @@ const styles = StyleSheet.create({
     borderColor: Colors.line,
     marginBottom: 16,
   },
-  incomeCard: { borderWidth: 2, borderColor: "#117342" },
+  incomeCard: { borderWidth: 2, borderColor: Colors.brand },
   reportCard: { borderWidth: 2, borderColor: Colors.navy },
   reportHeader: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   reportSub: { fontSize: 12, color: Colors.inkMuted, marginTop: 6, lineHeight: 17 },
@@ -515,7 +521,7 @@ const styles = StyleSheet.create({
   },
   reportDay: { fontSize: 14, fontWeight: "700", color: Colors.ink, flexShrink: 1 },
   reportCell: { fontSize: 14, color: Colors.inkSoft, fontWeight: "600" },
-  reportPaid: { fontSize: 13, color: "#117342", fontWeight: "800", textAlign: "right" },
+  reportPaid: { fontSize: 13, color: Colors.brandText, fontWeight: "800", textAlign: "right" },
   noteRow: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -596,4 +602,4 @@ const styles = StyleSheet.create({
   topName: { fontSize: 14, fontWeight: "600", color: Colors.ink },
   topSub: { fontSize: 12, color: Colors.inkSoft, marginTop: 2 },
   topCount: { fontSize: 14, fontWeight: "700", color: Colors.navy },
-});
+  });

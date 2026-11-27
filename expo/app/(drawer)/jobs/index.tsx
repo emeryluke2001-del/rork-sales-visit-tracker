@@ -11,7 +11,8 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Plus, Briefcase, Pencil, Trash2 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useJobs } from "@/providers/JobsProvider";
 import { useLocations } from "@/providers/LocationsProvider";
 import { Job, JobStage, STAGE_META, STAGE_ORDER, formatMoney } from "@/types/job";
@@ -30,6 +31,8 @@ function StageChip({
   stage: JobStage;
   onPress: () => void;
 }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const meta = STAGE_META[stage];
   return (
     <Pressable
@@ -44,6 +47,8 @@ function StageChip({
 }
 
 export default function JobsScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { jobs, updateJob, deleteJob } = useJobs();
   const { locations } = useLocations();
   const [filter, setFilter] = useState<"all" | JobStage>("all");
@@ -121,7 +126,7 @@ export default function JobsScreen() {
           style={({ pressed }) => [styles.addBtn, pressed && { opacity: 0.85 }]}
           testID="add-job-button"
         >
-          <Plus size={20} color={Colors.cream} strokeWidth={2.5} />
+          <Plus size={20} color={Colors.onPrimary} strokeWidth={2.5} />
         </Pressable>
       </View>
 
@@ -220,7 +225,8 @@ export default function JobsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   header: {
     flexDirection: "row",
@@ -238,7 +244,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: Colors.navy,
@@ -255,9 +261,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.line,
   },
-  chipActive: { backgroundColor: Colors.navy, borderColor: Colors.navy },
+  chipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   chipText: { fontSize: 13, color: Colors.inkSoft, fontWeight: "600" },
-  chipTextActive: { color: Colors.cream },
+  chipTextActive: { color: Colors.onPrimary },
   listContent: { paddingHorizontal: 20, paddingBottom: 100, gap: 12, paddingTop: 4 },
   card: {
     backgroundColor: Colors.paper,
@@ -275,7 +281,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: { fontSize: 16, fontWeight: "700", color: Colors.ink },
   cardSub: { fontSize: 12, color: Colors.inkSoft, marginTop: 3 },
-  amount: { fontSize: 15, fontWeight: "800", color: "#117342" },
+  amount: { fontSize: 15, fontWeight: "800", color: Colors.brandText },
   cardFooter: {
     flexDirection: "row",
     alignItems: "center",
@@ -299,4 +305,4 @@ const styles = StyleSheet.create({
   },
   emptyTitle: { fontSize: 17, fontWeight: "700", color: Colors.ink, marginBottom: 6 },
   emptyText: { fontSize: 14, color: Colors.inkSoft, textAlign: "center", lineHeight: 20 },
-});
+  });

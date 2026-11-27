@@ -10,7 +10,8 @@ import {
   View,
 } from "react-native";
 import { Check } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { STATUS_META, VisitStatus, Location } from "@/types/location";
 
 export type LocationFormValue = Omit<Location, "id" | "createdAt" | "updatedAt" | "visits">;
@@ -25,6 +26,8 @@ interface Props {
 const STATUSES: VisitStatus[] = ["prospect", "active", "closed", "cold"];
 
 export default function LocationForm({ initial, onSubmit, submitLabel, showFirstVisit }: Props) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const [businessName, setBusinessName] = useState<string>(initial?.businessName ?? "");
   const [address, setAddress] = useState<string>(initial?.address ?? "");
   const [contactName, setContactName] = useState<string>(initial?.contactName ?? "");
@@ -215,7 +218,7 @@ export default function LocationForm({ initial, onSubmit, submitLabel, showFirst
           ]}
           testID="submit-location"
         >
-          <Check size={18} color={Colors.cream} strokeWidth={2.5} />
+          <Check size={18} color={Colors.onPrimary} strokeWidth={2.5} />
           <Text style={styles.submitText}>{submitLabel}</Text>
         </Pressable>
       </ScrollView>
@@ -234,6 +237,8 @@ function Field({
   hint?: string;
   children: React.ReactNode;
 }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   return (
     <View style={styles.field}>
       <Text style={styles.fieldLabel}>
@@ -246,7 +251,8 @@ function Field({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   content: { padding: 20, paddingBottom: 60, gap: 4 },
   field: { marginBottom: 14 },
   fieldLabel: {
@@ -289,7 +295,7 @@ const styles = StyleSheet.create({
   statusChipText: { fontSize: 13, color: Colors.inkSoft, fontWeight: "600" },
   submit: {
     marginTop: 16,
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.primary,
     borderRadius: 14,
     paddingVertical: 15,
     flexDirection: "row",
@@ -297,5 +303,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
   },
-  submitText: { color: Colors.cream, fontSize: 15, fontWeight: "700" },
-});
+  submitText: { color: Colors.onPrimary, fontSize: 15, fontWeight: "700" },
+  });

@@ -10,7 +10,8 @@ import {
   View,
 } from "react-native";
 import { Check, Trash2 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 
 export function dayKeyLocal(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
@@ -48,6 +49,8 @@ export default function DayNoteModal({
   onDelete,
   onClose,
 }: Props) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const [text, setText] = useState<string>(initial);
   const hasNote = initial.trim().length > 0;
 
@@ -95,7 +98,7 @@ export default function DayNoteModal({
               style={({ pressed }) => [styles.saveBtn, pressed && { opacity: 0.9 }]}
               testID="day-note-save"
             >
-              <Check size={16} color={Colors.cream} strokeWidth={2.5} />
+              <Check size={16} color={Colors.onPrimary} strokeWidth={2.5} />
               <Text style={styles.saveText}>Save note</Text>
             </Pressable>
           </View>
@@ -105,7 +108,8 @@ export default function DayNoteModal({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   wrap: { flex: 1, justifyContent: "flex-end" },
   backdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(8,19,39,0.5)" },
   card: {
@@ -151,7 +155,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 14,
     borderRadius: 12,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
   },
-  saveText: { color: Colors.cream, fontWeight: "700", fontSize: 15 },
-});
+    saveText: { color: Colors.onPrimary, fontWeight: "700", fontSize: 15 },
+  });

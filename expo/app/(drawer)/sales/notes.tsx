@@ -2,7 +2,8 @@ import React, { useMemo, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NotebookPen, Plus } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useDayNotes } from "@/providers/DayNotesProvider";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 import DayNoteModal, { dayKeyLocal, dayLabel } from "@/components/DayNoteModal";
@@ -11,6 +12,8 @@ import { useJobs } from "@/providers/JobsProvider";
 import { formatMoney } from "@/types/job";
 
 export default function NotesScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { notes, setDayNote } = useDayNotes();
   const { locations } = useLocations();
   const { jobs } = useJobs();
@@ -59,7 +62,7 @@ export default function NotesScreen() {
           style={({ pressed }) => [styles.addBtn, pressed && { opacity: 0.85 }]}
           testID="add-day-note-button"
         >
-          <Plus size={20} color={Colors.cream} strokeWidth={2.5} />
+          <Plus size={20} color={Colors.onPrimary} strokeWidth={2.5} />
         </Pressable>
       </View>
 
@@ -114,7 +117,8 @@ export default function NotesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   headerRow: {
     flexDirection: "row",
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,
@@ -168,4 +172,4 @@ const styles = StyleSheet.create({
   },
   emptyTitle: { fontSize: 17, fontWeight: "700", color: Colors.ink, marginBottom: 6 },
   emptyText: { fontSize: 14, color: Colors.inkSoft, textAlign: "center", lineHeight: 20 },
-});
+  });

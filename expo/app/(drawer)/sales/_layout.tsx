@@ -1,10 +1,11 @@
 import { Tabs } from "expo-router";
 import { MapPin, BarChart3, Download, NotebookPen } from "lucide-react-native";
 import React from "react";
-import Colors from "@/constants/colors";
 import { Platform } from "react-native";
+import { useTheme } from "@/providers/ThemeProvider";
 
 export default function SalesTabLayout() {
+  const { colors: Colors } = useTheme();
   return (
     <Tabs
       screenOptions={{

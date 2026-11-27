@@ -20,12 +20,15 @@ import {
   Wallet,
   Briefcase,
 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocationById } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { STAGE_META, formatMoney } from "@/types/job";
 
 export default function AccountDetailScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { id } = useLocalSearchParams<{ id: string }>();
   const location = useLocationById(id);
   const { jobsByAccount } = useJobs();
@@ -88,7 +91,7 @@ export default function AccountDetailScreen() {
       >
         <View style={styles.hero}>
           <View style={[styles.badge, { backgroundColor: "#DCFCE7" }]}>
-            <Text style={[styles.badgeText, { color: "#117342" }]}>Account</Text>
+            <Text style={[styles.badgeText, { color: Colors.brandText }]}>Account</Text>
           </View>
           <Text style={styles.heroName}>{location.businessName}</Text>
           {location.contactName ? (
@@ -97,9 +100,9 @@ export default function AccountDetailScreen() {
         </View>
 
         <View style={styles.moneyGrid}>
-          <View style={[styles.moneyCard, { borderColor: "#117342" }]}>
-            <DollarSign size={16} color="#117342" />
-            <Text style={[styles.moneyValue, { color: "#117342" }]}>{formatMoney(totals.paid)}</Text>
+          <View style={[styles.moneyCard, { borderColor: Colors.brandText }]}>
+            <DollarSign size={16} color={Colors.brandText} />
+            <Text style={[styles.moneyValue, { color: Colors.brandText }]}>{formatMoney(totals.paid)}</Text>
             <Text style={styles.moneyLabel}>Total paid</Text>
           </View>
           <View style={[styles.moneyCard, { borderColor: Colors.danger }]}>
@@ -149,7 +152,7 @@ export default function AccountDetailScreen() {
               style={styles.addJobBtn}
               testID="add-account-job"
             >
-              <Plus size={14} color={Colors.cream} strokeWidth={2.5} />
+              <Plus size={14} color={Colors.onPrimary} strokeWidth={2.5} />
               <Text style={styles.addJobText}>Add job</Text>
             </Pressable>
           </View>
@@ -198,7 +201,8 @@ export default function AccountDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   content: { padding: 20, paddingBottom: 60, gap: 14 },
   notFound: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: Colors.cream },
   notFoundText: { color: Colors.inkSoft },
@@ -263,12 +267,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
   },
-  addJobText: { color: Colors.cream, fontSize: 12, fontWeight: "700" },
+  addJobText: { color: Colors.onPrimary, fontSize: 12, fontWeight: "700" },
   emptyJobs: {
     flexDirection: "row",
     alignItems: "center",
@@ -293,7 +297,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   stageMiniText: { fontSize: 10, fontWeight: "700", textTransform: "uppercase" },
-  jobAmount: { fontSize: 14, fontWeight: "700", color: "#117342" },
+  jobAmount: { fontSize: 14, fontWeight: "700", color: Colors.brandText },
   dirBtn: {
     flexDirection: "row",
     alignItems: "center",
@@ -306,4 +310,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.paper,
   },
   dirText: { color: Colors.navy, fontSize: 14, fontWeight: "700" },
-});
+  });

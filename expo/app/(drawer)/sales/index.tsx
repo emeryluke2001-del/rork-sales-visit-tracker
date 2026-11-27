@@ -18,7 +18,8 @@ import {
   Clock,
   SlidersHorizontal,
 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocations } from "@/providers/LocationsProvider";
 import { Location, STATUS_META, VisitStatus } from "@/types/location";
 import * as Haptics from "expo-haptics";
@@ -44,6 +45,8 @@ function formatRelative(iso?: string): string {
 }
 
 function LocationCard({ item, onPress }: { item: Location; onPress: () => void }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const meta = STATUS_META[item.status];
   return (
     <Pressable
@@ -68,7 +71,7 @@ function LocationCard({ item, onPress }: { item: Location; onPress: () => void }
           </View>
           {item.isAccount ? (
             <View style={[styles.badge, { backgroundColor: "#DCFCE7" }]}>
-              <Text style={[styles.badgeText, { color: "#117342" }]}>Account</Text>
+              <Text style={[styles.badgeText, { color: Colors.brandText }]}>Account</Text>
             </View>
           ) : null}
         </View>
@@ -106,6 +109,8 @@ function LocationCard({ item, onPress }: { item: Location; onPress: () => void }
 }
 
 export default function LocationsScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { locations, stats } = useLocations();
   const [query, setQuery] = useState<string>("");
   const [filter, setFilter] = useState<"all" | VisitStatus>("all");
@@ -150,7 +155,7 @@ export default function LocationsScreen() {
           style={({ pressed }) => [styles.addBtn, pressed && { opacity: 0.85 }]}
           testID="add-location-button"
         >
-          <Plus size={20} color={Colors.cream} strokeWidth={2.5} />
+          <Plus size={20} color={Colors.onPrimary} strokeWidth={2.5} />
         </Pressable>
       </View>
 
@@ -220,7 +225,8 @@ export default function LocationsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   header: {
     flexDirection: "row",
@@ -238,7 +244,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.primary,
     alignItems: "center",
     justifyContent: "center",
     shadowColor: Colors.navy,
@@ -280,9 +286,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.line,
   },
-  chipActive: { backgroundColor: Colors.navy, borderColor: Colors.navy },
+  chipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   chipText: { fontSize: 13, color: Colors.inkSoft, fontWeight: "600" },
-  chipTextActive: { color: Colors.cream },
+  chipTextActive: { color: Colors.onPrimary },
   listContent: { paddingHorizontal: 20, paddingBottom: 100, gap: 12 },
   card: {
     backgroundColor: Colors.paper,
@@ -328,4 +334,4 @@ const styles = StyleSheet.create({
   },
   emptyTitle: { fontSize: 17, fontWeight: "700", color: Colors.ink, marginBottom: 6 },
   emptyText: { fontSize: 14, color: Colors.inkSoft, textAlign: "center", lineHeight: 20 },
-});
+  });

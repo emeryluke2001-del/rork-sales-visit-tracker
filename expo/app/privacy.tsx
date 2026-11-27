@@ -2,12 +2,15 @@ import React from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Stack } from "expo-router";
 import { Shield, Trash2 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { useDayNotes } from "@/providers/DayNotesProvider";
 
 export default function PrivacyPolicyScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { locations, deleteAllData } = useLocations();
   const { deleteAllJobs } = useJobs();
   const { deleteAllNotes } = useDayNotes();
@@ -129,6 +132,8 @@ export default function PrivacyPolicyScreen() {
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>{title}</Text>
@@ -137,7 +142,8 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Colors.cream,
@@ -224,4 +230,4 @@ const styles = StyleSheet.create({
     color: Colors.inkMuted,
     textAlign: "center",
   },
-});
+  });

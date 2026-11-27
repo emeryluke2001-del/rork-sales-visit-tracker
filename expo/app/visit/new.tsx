@@ -10,11 +10,14 @@ import {
   View,
 } from "react-native";
 import { Check } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocationById, useLocations } from "@/providers/LocationsProvider";
 import { router, useLocalSearchParams } from "expo-router";
 
 export default function NewVisitScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { id } = useLocalSearchParams<{ id: string }>();
   const location = useLocationById(id);
   const { addVisit } = useLocations();
@@ -74,7 +77,7 @@ export default function NewVisitScreen() {
           style={({ pressed }) => [styles.save, saving && { opacity: 0.4 }, pressed && { opacity: 0.9 }]}
           testID="save-visit"
         >
-          <Check size={18} color={Colors.cream} strokeWidth={2.5} />
+          <Check size={18} color={Colors.onPrimary} strokeWidth={2.5} />
           <Text style={styles.saveText}>Log Visit</Text>
         </Pressable>
       </ScrollView>
@@ -82,7 +85,8 @@ export default function NewVisitScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   content: { padding: 20, gap: 6 },
   subtitle: {
@@ -115,7 +119,7 @@ const styles = StyleSheet.create({
   },
   save: {
     marginTop: 18,
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.primary,
     borderRadius: 14,
     paddingVertical: 15,
     flexDirection: "row",
@@ -123,5 +127,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
   },
-  saveText: { color: Colors.cream, fontSize: 15, fontWeight: "700" },
-});
+  saveText: { color: Colors.onPrimary, fontSize: 15, fontWeight: "700" },
+  });

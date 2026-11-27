@@ -21,7 +21,8 @@ import {
   Navigation,
   Building2,
 } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocationById, useLocations } from "@/providers/LocationsProvider";
 import { STATUS_META } from "@/types/location";
 
@@ -35,6 +36,8 @@ function formatFullDate(iso: string): string {
 }
 
 export default function LocationDetailScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { id } = useLocalSearchParams<{ id: string }>();
   const location = useLocationById(id);
   const { deleteLocation, deleteVisit, updateLocation } = useLocations();
@@ -142,7 +145,7 @@ export default function LocationDetailScreen() {
             ]}
             testID="view-account"
           >
-            <Building2 size={16} color={Colors.cream} />
+            <Building2 size={16} color={Colors.onPrimary} />
             <Text style={styles.accountBtnText}>View account</Text>
           </Pressable>
         ) : (
@@ -170,7 +173,7 @@ export default function LocationDetailScreen() {
             ]}
             testID="convert-to-account"
           >
-            <Building2 size={16} color={Colors.cream} />
+            <Building2 size={16} color={Colors.onPrimary} />
             <Text style={styles.accountBtnText}>Convert to account</Text>
           </Pressable>
         )}
@@ -234,7 +237,7 @@ export default function LocationDetailScreen() {
               style={styles.addVisitBtn}
               testID="add-visit"
             >
-              <Plus size={14} color={Colors.cream} strokeWidth={2.5} />
+              <Plus size={14} color={Colors.onPrimary} strokeWidth={2.5} />
               <Text style={styles.addVisitText}>Log visit</Text>
             </Pressable>
           </View>
@@ -295,6 +298,8 @@ function QuickBtn({
   onPress: () => void;
   disabled?: boolean;
 }) {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   return (
     <Pressable
       onPress={onPress}
@@ -311,7 +316,8 @@ function QuickBtn({
   );
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   content: { padding: 20, paddingBottom: 60, gap: 14 },
   notFound: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: Colors.cream },
   notFoundText: { color: Colors.inkSoft },
@@ -345,11 +351,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     gap: 8,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     paddingVertical: 14,
     borderRadius: 14,
   },
-  accountBtnText: { color: Colors.cream, fontSize: 14, fontWeight: "700" },
+  accountBtnText: { color: Colors.onPrimary, fontSize: 14, fontWeight: "700" },
   quickRow: { flexDirection: "row", gap: 10 },
   quickBtn: {
     flex: 1,
@@ -394,12 +400,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
-    backgroundColor: Colors.navy,
+    backgroundColor: Colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 10,
   },
-  addVisitText: { color: Colors.cream, fontSize: 12, fontWeight: "700" },
+  addVisitText: { color: Colors.onPrimary, fontSize: 12, fontWeight: "700" },
   emptyVisits: {
     flexDirection: "row",
     alignItems: "center",
@@ -436,4 +442,4 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.paper,
   },
   deleteText: { color: Colors.danger, fontSize: 14, fontWeight: "700" },
-});
+  });

@@ -3,13 +3,16 @@ import { FlatList, Platform, Pressable, StyleSheet, Text, TextInput, View } from
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Building2, MapPin, Phone } from "lucide-react-native";
-import Colors from "@/constants/colors";
+import { useTheme } from "@/providers/ThemeProvider";
+import type { ThemeColors } from "@/constants/theme";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { formatMoney } from "@/types/job";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 
 export default function AccountsScreen() {
+  const { colors: Colors } = useTheme();
+  const styles = makeStyles(Colors);
   const { locations } = useLocations();
   const { jobsByAccount } = useJobs();
   const [query, setQuery] = useState<string>("");
@@ -148,10 +151,12 @@ export default function AccountsScreen() {
 }
 
 function PlusIcon() {
-  return <Text style={{ color: Colors.cream, fontSize: 24, fontWeight: "700", lineHeight: 28 }}>+</Text>;
+  const { colors: Colors } = useTheme();
+  return <Text style={{ color: Colors.onPrimary, fontSize: 24, fontWeight: "700", lineHeight: 28 }}>+</Text>;
 }
 
-const styles = StyleSheet.create({
+const makeStyles = (Colors: ThemeColors) =>
+  StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.cream },
   header: {
     flexDirection: "row",
@@ -169,7 +174,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 22,
-    backgroundColor: "#117342",
+    backgroundColor: Colors.brand,
     alignItems: "center",
     justifyContent: "center",
     elevation: 4,
@@ -211,7 +216,7 @@ const styles = StyleSheet.create({
   cardTitle: { fontSize: 16, fontWeight: "700", color: Colors.ink },
   cardSub: { fontSize: 13, color: Colors.inkSoft, marginTop: 2 },
   totals: { alignItems: "flex-end", gap: 4 },
-  paidText: { fontSize: 12, fontWeight: "800", color: "#117342" },
+  paidText: { fontSize: 12, fontWeight: "800", color: Colors.brandText },
   owedText: { fontSize: 12, fontWeight: "800", color: Colors.danger },
   noJobs: { fontSize: 12, color: Colors.inkMuted, fontWeight: "600" },
   footerRow: {
@@ -239,4 +244,4 @@ const styles = StyleSheet.create({
   },
   emptyTitle: { fontSize: 17, fontWeight: "700", color: Colors.ink, marginBottom: 6 },
   emptyText: { fontSize: 14, color: Colors.inkSoft, textAlign: "center", lineHeight: 20 },
-});
+  });
