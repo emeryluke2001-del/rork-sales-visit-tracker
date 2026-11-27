@@ -13,6 +13,7 @@ import { Check } from "lucide-react-native";
 import { useTheme } from "@/providers/ThemeProvider";
 import type { ThemeColors } from "@/constants/theme";
 import { STATUS_META, VisitStatus, Location } from "@/types/location";
+import ScreenBackground from "@/components/ScreenBackground";
 
 export type LocationFormValue = Omit<Location, "id" | "createdAt" | "updatedAt" | "visits">;
 
@@ -67,6 +68,7 @@ export default function LocationForm({ initial, onSubmit, submitLabel, showFirst
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
+      <ScreenBackground />
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"

@@ -21,6 +21,7 @@ import { STATUS_META, VisitStatus } from "@/types/location";
 import { Job, formatMoney } from "@/types/job";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 import DayNoteModal, { dayKeyLocal, dayLabel } from "@/components/DayNoteModal";
+import ScreenBackground from "@/components/ScreenBackground";
 
 function Stat({
   icon,
@@ -177,6 +178,7 @@ export default function InsightsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScreenBackground />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <DrawerMenuButton />

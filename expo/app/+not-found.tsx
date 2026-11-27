@@ -1,6 +1,7 @@
 import { Link, Stack } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 import { useTheme } from "@/providers/ThemeProvider";
+import ScreenBackground from "@/components/ScreenBackground";
 import type { ThemeColors } from "@/constants/theme";
 
 export default function NotFoundScreen() {
@@ -10,6 +11,7 @@ export default function NotFoundScreen() {
     <>
       <Stack.Screen options={{ title: "Not Found" }} />
       <View style={styles.container}>
+        <ScreenBackground />
         <Text style={styles.title}>This page doesn&apos;t exist.</Text>
         <Link href="/" style={styles.link}>
           <Text style={styles.linkText}>Go back home</Text>

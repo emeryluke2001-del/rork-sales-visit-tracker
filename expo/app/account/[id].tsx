@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
+import ScreenBackground from "@/components/ScreenBackground";
 import {
   Phone,
   Mail,
@@ -47,6 +48,7 @@ export default function AccountDetailScreen() {
   if (!location || !location.isAccount) {
     return (
       <View style={styles.notFound}>
+        <ScreenBackground />
         <Text style={styles.notFoundText}>Account not found</Text>
       </View>
     );
@@ -84,6 +86,7 @@ export default function AccountDetailScreen() {
           ),
         }}
       />
+      <ScreenBackground />
       <ScrollView
         style={{ flex: 1, backgroundColor: Colors.cream }}
         contentContainerStyle={styles.content}

@@ -13,6 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { THEMES, getTheme, type ThemeColors, type ThemeId } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
+import ScreenBackground from "@/components/ScreenBackground";
 
 function ThemeSwatch({ colors }: { colors: ThemeColors }) {
   return (
@@ -38,6 +39,7 @@ export default function SettingsScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: Colors.cream }]}>
+      <ScreenBackground />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <DrawerMenuButton />

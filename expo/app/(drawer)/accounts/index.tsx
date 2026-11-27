@@ -9,6 +9,7 @@ import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { formatMoney } from "@/types/job";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
+import ScreenBackground from "@/components/ScreenBackground";
 
 export default function AccountsScreen() {
   const { colors: Colors } = useTheme();
@@ -38,6 +39,7 @@ export default function AccountsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScreenBackground />
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4, flex: 1 }}>
           <DrawerMenuButton />

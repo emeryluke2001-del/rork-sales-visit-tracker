@@ -24,6 +24,7 @@ import { useLocations } from "@/providers/LocationsProvider";
 import { Location, STATUS_META, VisitStatus } from "@/types/location";
 import * as Haptics from "expo-haptics";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
+import ScreenBackground from "@/components/ScreenBackground";
 
 const FILTERS: { key: "all" | VisitStatus; label: string }[] = [
   { key: "all", label: "All" },
@@ -139,6 +140,7 @@ export default function LocationsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScreenBackground />
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4, flex: 1 }}>
           <DrawerMenuButton />

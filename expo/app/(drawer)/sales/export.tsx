@@ -26,6 +26,7 @@ import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { locationsToCSV, jobsToCSV } from "@/utils/csv";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
+import ScreenBackground from "@/components/ScreenBackground";
 
 export default function ExportScreen() {
   const { colors: Colors } = useTheme();
@@ -121,6 +122,7 @@ export default function ExportScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScreenBackground />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <DrawerMenuButton />

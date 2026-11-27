@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import { Stack, router, useLocalSearchParams } from "expo-router";
+import ScreenBackground from "@/components/ScreenBackground";
 import { Calendar, Pencil, Trash2, Building2 } from "lucide-react-native";
 import { useTheme } from "@/providers/ThemeProvider";
 import type { ThemeColors } from "@/constants/theme";
@@ -33,6 +34,7 @@ export default function JobDetailScreen() {
   if (!job) {
     return (
       <View style={styles.notFound}>
+        <ScreenBackground />
         <Text style={styles.notFoundText}>Job not found</Text>
       </View>
     );
@@ -79,6 +81,7 @@ export default function JobDetailScreen() {
           ),
         }}
       />
+      <ScreenBackground />
       <ScrollView
         style={{ flex: 1, backgroundColor: Colors.cream }}
         contentContainerStyle={styles.content}

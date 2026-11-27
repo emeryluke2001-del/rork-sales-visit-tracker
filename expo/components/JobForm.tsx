@@ -14,6 +14,7 @@ import {
 import { Check, ChevronDown } from "lucide-react-native";
 import { useTheme } from "@/providers/ThemeProvider";
 import type { ThemeColors } from "@/constants/theme";
+import ScreenBackground from "@/components/ScreenBackground";
 import { useLocations } from "@/providers/LocationsProvider";
 import { Job, JobStage, STAGE_META, STAGE_ORDER } from "@/types/job";
 
@@ -81,6 +82,7 @@ export default function JobForm({ initial, onSubmit, submitLabel }: Props) {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
     >
+      <ScreenBackground />
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"

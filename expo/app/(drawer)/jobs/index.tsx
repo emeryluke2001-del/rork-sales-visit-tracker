@@ -18,6 +18,7 @@ import { useLocations } from "@/providers/LocationsProvider";
 import { Job, JobStage, STAGE_META, STAGE_ORDER, formatMoney } from "@/types/job";
 import * as Haptics from "expo-haptics";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
+import ScreenBackground from "@/components/ScreenBackground";
 
 const FILTERS: { key: "all" | JobStage; label: string }[] = [
   { key: "all", label: "All" },
@@ -108,6 +109,7 @@ export default function JobsScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScreenBackground />
       <View style={styles.header}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 4, flex: 1 }}>
           <DrawerMenuButton />
@@ -160,7 +162,6 @@ export default function JobsScreen() {
         keyExtractor={(i) => i.id}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => {
-          const meta = STAGE_META[item.stage];
           return (
             <View style={styles.card}>
               <Pressable

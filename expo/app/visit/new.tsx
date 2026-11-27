@@ -14,6 +14,7 @@ import { useTheme } from "@/providers/ThemeProvider";
 import type { ThemeColors } from "@/constants/theme";
 import { useLocationById, useLocations } from "@/providers/LocationsProvider";
 import { router, useLocalSearchParams } from "expo-router";
+import ScreenBackground from "@/components/ScreenBackground";
 
 export default function NewVisitScreen() {
   const { colors: Colors } = useTheme();
@@ -27,6 +28,7 @@ export default function NewVisitScreen() {
   if (!location) {
     return (
       <View style={styles.container}>
+        <ScreenBackground />
         <Text style={styles.title}>Location not found</Text>
       </View>
     );
@@ -44,6 +46,7 @@ export default function NewVisitScreen() {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
+      <ScreenBackground />
       <ScrollView
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"

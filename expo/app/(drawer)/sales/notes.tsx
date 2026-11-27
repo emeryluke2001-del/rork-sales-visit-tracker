@@ -7,6 +7,7 @@ import type { ThemeColors } from "@/constants/theme";
 import { useDayNotes } from "@/providers/DayNotesProvider";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 import DayNoteModal, { dayKeyLocal, dayLabel } from "@/components/DayNoteModal";
+import ScreenBackground from "@/components/ScreenBackground";
 import { useLocations } from "@/providers/LocationsProvider";
 import { useJobs } from "@/providers/JobsProvider";
 import { formatMoney } from "@/types/job";
@@ -51,6 +52,7 @@ export default function NotesScreen() {
 
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      <ScreenBackground />
       <View style={styles.headerRow}>
         <DrawerMenuButton />
         <View style={{ flex: 1 }}>

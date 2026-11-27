@@ -1,6 +1,7 @@
 import React from "react";
 import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { Stack } from "expo-router";
+import ScreenBackground from "@/components/ScreenBackground";
 import { Shield, Trash2 } from "lucide-react-native";
 import { useTheme } from "@/providers/ThemeProvider";
 import type { ThemeColors } from "@/constants/theme";
@@ -37,6 +38,7 @@ export default function PrivacyPolicyScreen() {
   return (
     <>
       <Stack.Screen options={{ title: "Privacy Policy" }} />
+      <ScreenBackground />
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.content}
