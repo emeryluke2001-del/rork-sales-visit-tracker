@@ -8,6 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeProvider, useTheme } from "@/providers/ThemeProvider";
+import { ThemeProvider as NavThemeProvider, DarkTheme } from "@react-navigation/native";
 import { LocationsProvider } from "@/providers/LocationsProvider";
 import { JobsProvider } from "@/providers/JobsProvider";
 import { DayNotesProvider } from "@/providers/DayNotesProvider";
@@ -18,7 +19,19 @@ const queryClient = new QueryClient();
 
 function RootLayoutNav() {
   const { colors: Colors } = useTheme();
+  const navTheme = {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      background: Colors.canvasGradient ? "transparent" : Colors.cream,
+      card: Colors.paper,
+      text: Colors.ink,
+      border: Colors.line,
+      primary: Colors.navy,
+    },
+  };
   return (
+    <NavThemeProvider value={navTheme}>
     <View style={{ flex: 1 }}>
       <LinearGradient
         pointerEvents="none"
@@ -91,6 +104,7 @@ function RootLayoutNav() {
       />
     </Stack>
     </View>
+    </NavThemeProvider>
   );
 }
 
