@@ -69,7 +69,7 @@ export default function InsightsScreen() {
   const [noteDay, setNoteDay] = useState<string | null>(null);
 
   const last30 = useMemo(() => {
-    const cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const cutoff = new Date().getTime() - 30 * 24 * 60 * 60 * 1000;
     return locations.reduce(
       (acc, l) => acc + l.visits.filter((v) => new Date(v.date).getTime() > cutoff).length,
       0

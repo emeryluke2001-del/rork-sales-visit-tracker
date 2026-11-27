@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import {
-  Alert,
   Linking,
   Platform,
   Pressable,

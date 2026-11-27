@@ -8,12 +8,13 @@ export const STAGE_ORDER: JobStage[] = [
   "paid",
 ];
 
+/** Translucent washes + saturated mid-tone text: readable on every theme. */
 export const STAGE_META: Record<JobStage, { label: string; color: string; bg: string }> = {
-  quoted: { label: "Quoted", color: "#0E1F3A", bg: "#E0E7FF" },
-  scheduled: { label: "Scheduled", color: "#1D4ED8", bg: "#DBEAFE" },
-  in_progress: { label: "In Progress", color: "#92400E", bg: "#FEF3C7" },
-  completed: { label: "Completed", color: "#065F46", bg: "#D1FAE5" },
-  paid: { label: "Paid", color: "#117342", bg: "#DCFCE7" },
+  quoted: { label: "Quoted", color: "#4F46E5", bg: "rgba(79,70,229,0.14)" },
+  scheduled: { label: "Scheduled", color: "#1D4ED8", bg: "rgba(37,99,235,0.14)" },
+  in_progress: { label: "In Progress", color: "#B45309", bg: "rgba(180,83,9,0.14)" },
+  completed: { label: "Completed", color: "#059669", bg: "rgba(5,150,105,0.14)" },
+  paid: { label: "Paid", color: "#047857", bg: "rgba(5,150,105,0.14)" },
 };
 
 export interface Job {

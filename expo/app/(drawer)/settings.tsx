@@ -10,7 +10,7 @@ import {
 import React from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { THEMES, type ThemeColors, type ThemeId } from "@/constants/theme";
+import { THEMES, getTheme, type ThemeColors, type ThemeId } from "@/constants/theme";
 import { useTheme } from "@/providers/ThemeProvider";
 import DrawerMenuButton from "@/components/DrawerMenuButton";
 
@@ -80,15 +80,7 @@ export default function SettingsScreen() {
                 <View style={styles.themeInfo}>
                   <Text style={[styles.themeLabel, { color: Colors.ink }]}>{theme.label}</Text>
                   <Text style={[styles.themeHint, { color: Colors.inkMuted }]}>{theme.hint}</Text>
-                  <ThemeSwatch
-                    colors={
-                      theme.id === "midnight"
-                        ? MIDNIGHT_PREVIEW
-                        : theme.id === "emerald"
-                          ? EMERALD_PREVIEW
-                          : ORIGINAL_PREVIEW
-                    }
-                  />
+                  <ThemeSwatch colors={getTheme(theme.id)} />
                 </View>
                 <View
                   style={[
@@ -127,64 +119,6 @@ export default function SettingsScreen() {
     </View>
   );
 }
-
-const ORIGINAL_PREVIEW: ThemeColors = {
-  cream: "#FAF7F2",
-  paper: "#FFFFFF",
-  navyDeep: "#081327",
-  navy: "#0E1F3A",
-  primary: "#0E1F3A",
-  onPrimary: "#FAF7F2",
-  brand: "#117342",
-  brandText: "#117342",
-  ink: "#0F172A",
-  inkSoft: "#475569",
-  inkMuted: "#94A3B8",
-  line: "#E5E1D8",
-  amber: "#F59E0B",
-  amberSoft: "#FCD34D",
-  success: "#059669",
-  danger: "#DC2626",
-};
-
-const MIDNIGHT_PREVIEW: ThemeColors = {
-  cream: "#0A3A69",
-  paper: "#0F4A85",
-  navyDeep: "#062B4F",
-  navy: "#F97066",
-  primary: "#D64545",
-  onPrimary: "#FFF7F5",
-  brand: "#22C55E",
-  brandText: "#5EEA9E",
-  ink: "#F0F6FC",
-  inkSoft: "#C3D8EC",
-  inkMuted: "#8FABC8",
-  line: "#1F5C99",
-  amber: "#FFC220",
-  amberSoft: "#FCD34D",
-  success: "#34D399",
-  danger: "#FF6B6B",
-};
-
-const EMERALD_PREVIEW: ThemeColors = {
-  cream: "transparent",
-  paper: "rgba(9,58,32,0.08)",
-  navyDeep: "#0A3D24",
-  navy: "#EFCF6E",
-  primary: "#FAE38C",
-  onPrimary: "#1A1400",
-  brand: "#FAE38C",
-  brandText: "#8F6B00",
-  ink: "#0F1512",
-  inkSoft: "#3F5A4A",
-  inkMuted: "#5E7D6B",
-  line: "#DCE7E0",
-  amber: "#F5D76E",
-  amberSoft: "#FBEDB9",
-  success: "#00A63E",
-  danger: "#E5484D",
-  canvasGradient: ["#FFFFFF", "#F2FCF6", "#C9F6DA", "#55E98D", "#00DC58"],
-};
 
 const styles = StyleSheet.create({
   container: { flex: 1 },

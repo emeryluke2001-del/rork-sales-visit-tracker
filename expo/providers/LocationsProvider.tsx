@@ -162,10 +162,11 @@ export const [LocationsProvider, useLocations] = createContextHook(() => {
     };
     for (const l of locations) byStatus[l.status] = (byStatus[l.status] ?? 0) + 1;
     const totalVisits = locations.reduce((acc, l) => acc + l.visits.length, 0);
-    const thisWeek = locations.reduce((acc, l) => {
-      const wk = Date.now() - 7 * 24 * 60 * 60 * 1000;
-      return acc + l.visits.filter((v) => new Date(v.date).getTime() > wk).length;
-    }, 0);
+    const weekCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    const thisWeek = locations.reduce(
+      (acc, l) => acc + l.visits.filter((v) => new Date(v.date).getTime() > weekCutoff).length,
+      0
+    );
     return { byStatus, totalVisits, thisWeek, total: locations.length };
   }, [locations]);
 
