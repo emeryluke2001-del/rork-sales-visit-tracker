@@ -13,7 +13,9 @@ export default function DrawerLayout() {
         drawerInactiveTintColor: Colors.inkSoft,
         drawerActiveBackgroundColor: "rgba(17,115,66,0.08)",
         drawerLabelStyle: { fontSize: 15, fontWeight: "600" },
-        drawerStyle: { backgroundColor: Colors.cream },
+        drawerStyle: {
+          backgroundColor: Colors.canvasGradient ? "#F6FCF8" : Colors.cream,
+        },
         overlayColor: "rgba(8,19,39,0.45)",
       }}
     >
